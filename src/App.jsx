@@ -61,7 +61,7 @@ function App() {
           <div className="flex items-center gap-3">
             <BookOpen className="h-8 w-8 text-primary" />
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Задания по информатике</h1>
+              <h1 className="text-3xl font-bold text-foreground">StasoReshebnik</h1>
               <p className="text-muted-foreground">Сборник разобранных задач с решениями</p>
             </div>
           </div>
@@ -161,7 +161,7 @@ function App() {
       <footer className="border-t bg-card mt-12">
         <div className="container mx-auto px-4 py-6">
           <p className="text-center text-muted-foreground">
-            © 2025 Задания по информатике. Создано для учебных целей.
+            © 2025 StasoReshebnik.
           </p>
         </div>
       </footer>
