@@ -22,36 +22,6 @@ const tasksData = [
       }
     ]
   },
-//   {
-//     "type": "Тип 26",
-//     "tasks": [
-//       {
-//         "name": "SUUUUU",
-//         "mdFile": "Тип 26/SUUUUU/SUUUUU.md"
-//       },
-//       {
-//         "name": "БабаКапа",
-//         "mdFile": "Тип 26/БабаКапа/БабаКапа.md"
-//       },
-//       {
-//         "name": "Кринж",
-//         "mdFile": "Тип 26/Кринж/Кринж.md"
-//       }
-//     ]
-//   },
-//   {
-//     "type": "Тип 27",
-//     "tasks": [
-//       {
-//         "name": "КрисаЛариса",
-//         "mdFile": "Тип 27/КрисаЛариса/КрисаЛариса.md"
-//       },
-//       {
-//         "name": "Мондавожка",
-//         "mdFile": "Тип 27/Мондавожка/Мондавожка.md"
-//       }
-//     ]
-//   }
 ]
 
 export const useTaskLoader = () => {
@@ -71,7 +41,7 @@ export const useTaskLoader = () => {
   const loadTaskContent = async (task) => {
     try {
       // Пытаемся загрузить файл из assets
-      const response = await fetch(`/src/assets/types/${task.mdFile}`)
+      const response = await fetch(`/ansbook/src/assets/types/${task.mdFile}`)
       if (response.ok) {
         return await response.text()
       } else {
@@ -106,7 +76,7 @@ print(solve_${task.name.toLowerCase()}())
   const loadDataFile = async (task) => {
     try {
       if (task.dataFile) {
-        const response = await fetch(`/src/assets/types/${task.dataFile}`)
+        const response = await fetch(`/ansbook/src/assets/types/${task.dataFile}`)
         if (response.ok) {
           return await response.text()
         }
