@@ -17,36 +17,23 @@ with open("26_21719.txt", "r") as file:
     data = [list(map(int, i.split(' '))) for i in file.readlines()][1:]
 
 def group(mas):
-    result, temp = [], []
-
-    # Последний элемент добавленный в последнюю группу  
-    prev = None  
-    for i in range(len(mas) - 1):
-        if mas[i] + 2 == mas[i + 1]:
-            temp.append(mas[i])
-            prev = mas[i]
-            continue
-
-        if prev is None:
-            continue
-
-        if prev + 2 == mas[i + 1]:
-            temp.append(mas[i + 1])
-            prev = mas[i + 1]
-
-        if len(temp) >= 2:
-            result.append(temp)
-        temp = []
-
-    if prev is None:
+    if not mas:
         return []
+    
+    result = []
+    current = [mas[0]]
+    
+    for i in range(1, len(mas)):
+        if mas[i] == current[-1] + 2:
+            current.append(mas[i])
+        else:
+            if len(current) >= 2:
+                result.append(current)
+            current = [mas[i]]
 
-    if prev + 2 == mas[i + 1]:
-        temp.append(mas[i + 1])
-
-    if len(temp) >= 2:
-        result.append(temp)
-
+    if len(current) >= 2:
+        result.append(current)
+        
     return result
 
 table = {}
