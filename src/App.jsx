@@ -34,11 +34,16 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [expandedTypes, setExpandedTypes] = useState({})
 
   useEffect(() => {
+    setSidebarOpen(!isMobile)
+  }, [isMobile])
+
+  useEffect(() => {
     if (tasks.length > 0) {
+      // Разворачиваем все типы по умолчанию
       const expanded = {}
       tasks.forEach(type => {
         expanded[type.type] = true
@@ -55,7 +60,7 @@ function App() {
     setCurrentTask(task)
     setLoading(true)
     
-    // Закрываем sidebar на мобильных после выбора задания
+    // Закрываем sidebar на мобильных устройствах при выборе задания
     if (isMobile) {
       setSidebarOpen(false)
     }
@@ -76,7 +81,7 @@ function App() {
       try {
         await navigator.clipboard.writeText(codeMatch[1])
         setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
+        setTimeout(() => setCopied(false), 1700)
       } catch (err) {
         console.error('Ошибка копирования:', err)
       }
@@ -130,48 +135,41 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex relative">
       {/* Overlay для мобильных устройств */}
       {isMobile && sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40"
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
-
+      
       {/* Sidebar */}
-      <aside 
-        className={`
-          ${isMobile ? 'fixed' : 'relative'}
-          ${isMobile && !sidebarOpen ? '-translate-x-full' : 'translate-x-0'}
-          w-80
-          h-screen
-          border-r 
-          bg-card
-          transition-transform 
-          duration-300 
-          ease-in-out
-          ${isMobile ? 'z-50' : 'z-0'}
-        `}
-      >
-        <div className="flex flex-col h-full p-4">
-          {/* Header */}
+      <div className={`
+        ${isMobile 
+          ? `fixed left-0 top-0 h-full z-50 transform transition-transform duration-300 ${
+              sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            } w-80` 
+          : `${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300`
+        } 
+        border-r bg-card overflow-hidden
+      `}>
+        <div className="p-4">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Списочек заданий</h2>
-            {isMobile && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setSidebarOpen(false)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            )}
+            <h2 className="text-lg font-semibold">Списочек задач</h2>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSidebarOpen(false)}
+              className={isMobile ? "" : "hidden"}
+            >
+              <X className="h-4 w-4" />
+            </Button>
           </div>
           
           {/* Search */}
           <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Поиск по названию..."
               value={searchTerm}
@@ -181,7 +179,7 @@ function App() {
           </div>
 
           {/* Tasks Navigation */}
-          <ScrollArea className="flex-1 -mx-4 px-4">
+          <ScrollArea className="h-[calc(100vh-200px)]">
             <div className="space-y-2">
               {filteredTasks.map((type, typeIndex) => (
                 <div key={typeIndex} className="space-y-1">
@@ -190,16 +188,16 @@ function App() {
                     className="w-full justify-between p-2 h-auto"
                     onClick={() => toggleTypeExpansion(type.type)}
                   >
-                    <span className="font-medium text-left">{type.type}</span>
+                    <span className="font-medium">{type.type}</span>
                     {expandedTypes[type.type] ? (
-                      <ChevronDown className="h-4 w-4 flex-shrink-0" />
+                      <ChevronDown className="h-4 w-4" />
                     ) : (
-                      <ChevronRight className="h-4 w-4 flex-shrink-0" />
+                      <ChevronRight className="h-4 w-4" />
                     )}
                   </Button>
                   
                   {expandedTypes[type.type] && (
-                    <div className="ml-2 space-y-1">
+                    <div className="ml-4 space-y-1">
                       {type.tasks.map((task, taskIndex) => (
                         <Button
                           key={taskIndex}
@@ -207,8 +205,8 @@ function App() {
                           className="w-full justify-start p-2 h-auto text-sm"
                           onClick={() => loadTask(task)}
                         >
-                          <FileText className="h-3 w-3 mr-2 flex-shrink-0" />
-                          <span className="text-left break-words">{task.name}</span>
+                          <FileText className="h-3 w-3 mr-2" />
+                          {task.name}
                         </Button>
                       ))}
                     </div>
@@ -218,158 +216,155 @@ function App() {
             </div>
           </ScrollArea>
         </div>
-      </aside>
+      </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="border-b bg-card p-4 sticky top-0 z-30">
+        <header className="border-b bg-card p-4">
           <div className="flex items-center gap-3">
             <Button
               variant="ghost"
-              size="icon"
+              size="sm"
               onClick={() => setSidebarOpen(!sidebarOpen)}
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-4 w-4" />
             </Button>
-            <BookOpen className="h-6 w-6 text-primary flex-shrink-0" />
-            <div className="min-w-0 flex-1">
-              <h1 className="text-xl sm:text-2xl font-bold text-foreground truncate">
-                StasikHub
-              </h1>
-              <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">
-                Тут лежат разобранные задачки по информатике :)
-              </p>
+            <BookOpen className="h-6 w-6 text-primary" />
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">StasikHub</h1>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+                onClick={() => window.open('https://t.me/macronx', '_blank')}
+              >
+                <svg 
+                  className="h-4 w-4 text-[#229ED9]" 
+                  viewBox="0 0 24 24" 
+                  fill="currentColor"
+                >
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.5 3.37-.52.36-.99.54-1.41.53-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.37-.48 1.03-.74 4.03-1.75 6.72-2.91 8.07-3.48 3.85-1.63 4.64-1.92 5.17-1.93.11 0 .37.03.54.18.14.12.18.28.2.45-.02.14-.02.3-.03.44z"/>
+                </svg>
+                @macronx
+              </Button>
             </div>
           </div>
         </header>
 
         {/* Task Content */}
-        <main className="flex-1 overflow-auto">
-          <div className="p-4 sm:p-6">
-            {loading ? (
-              <div className="flex items-center justify-center min-h-[400px]">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                  <p className="text-muted-foreground">Загрузка задания...</p>
-                </div>
+        <main className="flex-1 p-6 overflow-auto">
+          {loading ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-muted-foreground">Загрузка задания...</p>
               </div>
-            ) : currentTask ? (
-              <Card className="max-w-4xl mx-auto">
-                <CardHeader>
-                  <div className="space-y-3">
-                    <CardTitle className="flex items-start gap-2 text-lg sm:text-xl">
-                      <Code className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                      <span className="break-words">{currentTask.name}</span>
-                    </CardTitle>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <Badge variant="secondary" className="flex items-center gap-1">
-                        <FileText className="h-3 w-3" />
-                        <span className="text-xs">
-                          {tasks.find(type => type.tasks.some(task => task.name === currentTask.name))?.type}
-                        </span>
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">Python</Badge>
-                    </div>
+            </div>
+          ) : currentTask ? (
+            <Card className="max-w-4xl mx-auto card-hover">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2 task-header">
+                    <Code className="h-5 w-5" />
+                    {currentTask.name}
+                  </CardTitle>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="flex items-center gap-1">
+                      <FileText className="h-3 w-3" />
+                      {tasks.find(type => type.tasks.some(task => task.name === currentTask.name))?.type}
+                    </Badge>
+                    <Badge variant="outline">Python</Badge>
                   </div>
-                  <Separator className="mt-4" />
-                </CardHeader>
+                </div>
+                <Separator className="mt-4" />
+              </CardHeader>
+              <CardContent>
+                <div className="prose prose-slate dark:prose-invert max-w-none">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    rehypePlugins={[rehypeHighlight]}
+                    components={{
+                      h3: ({node, ...props}) => <h3 className="text-xl font-bold text-primary mb-4 mt-6" {...props} />,
+                      h4: ({node, ...props}) => <h4 className="text-lg font-semibold text-foreground mb-3 mt-5" {...props} />,
+                      p: ({node, ...props}) => <p className="mb-4 text-foreground leading-relaxed" {...props} />,
+                      code: ({node, className, children, ...props}) => {
+                        const match = /language-(\w+)/.exec(className || '')
+                        return match ? (
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        ) : (
+                          <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
+                            {children}
+                          </code>
+                        )
+                      },
+                      pre: ({node, ...props}) => (
+                        <div className="relative">
+                          <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4" {...props} />
+                        </div>
+                      ),
+                      strong: ({node, ...props}) => <strong className="font-semibold text-foreground" {...props} />,
+                      blockquote: ({node, ...props}) => (
+                        <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground my-4" {...props} />
+                      ),
+                    }}
+                  >
+                    {taskContent}
+                  </ReactMarkdown>
+                </div>
                 
-                <CardContent>
-                  <div className="prose prose-sm sm:prose prose-slate dark:prose-invert max-w-none">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      rehypePlugins={[rehypeHighlight]}
-                      components={{
-                        h3: ({node, ...props}) => (
-                          <h3 className="text-lg sm:text-xl font-bold text-primary mb-3 mt-6" {...props} />
-                        ),
-                        h4: ({node, ...props}) => (
-                          <h4 className="text-base sm:text-lg font-semibold text-foreground mb-2 mt-4" {...props} />
-                        ),
-                        p: ({node, ...props}) => (
-                          <p className="mb-4 text-foreground leading-relaxed text-sm sm:text-base" {...props} />
-                        ),
-                        code: ({node, className, children, ...props}) => {
-                          const match = /language-(\w+)/.exec(className || '')
-                          return match ? (
-                            <code className={className} {...props}>
-                              {children}
-                            </code>
-                          ) : (
-                            <code className="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm font-mono" {...props}>
-                              {children}
-                            </code>
-                          )
-                        },
-                        pre: ({node, ...props}) => (
-                          <div className="relative -mx-4 sm:mx-0">
-                            <pre className="bg-slate-900 text-slate-100 p-3 sm:p-4 rounded-none sm:rounded-lg overflow-x-auto mb-4 text-xs sm:text-sm" {...props} />
-                          </div>
-                        ),
-                        strong: ({node, ...props}) => (
-                          <strong className="font-semibold text-foreground" {...props} />
-                        ),
-                        blockquote: ({node, ...props}) => (
-                          <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground my-4 text-sm" {...props} />
-                        ),
-                      }}
-                    >
-                      {taskContent}
-                    </ReactMarkdown>
-                  </div>
-                  
-                  {/* Action buttons */}
-                  <div className="flex flex-col gap-2 mt-6 pt-6 border-t">
-                    {currentTask.dataFile && (
-                      <Button 
-                        variant="outline" 
-                        className="w-full justify-center gap-2"
-                        onClick={downloadDataFile}
-                      >
-                        <Download className="h-4 w-4" />
-                        <span className="text-sm">Скачать входные данные</span>
-                      </Button>
-                    )}
+                {/* Action buttons */}
+                <div className="flex flex-wrap gap-3 mt-8 pt-6 border-t">
+                  {currentTask.dataFile && (
                     <Button 
                       variant="outline" 
-                      className="w-full justify-center gap-2"
-                      onClick={copyCode}
-                      disabled={copied}
+                      className="flex items-center gap-2 action-button"
+                      onClick={downloadDataFile}
                     >
-                      {copied ? (
-                        <>
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                          <span className="text-sm">Скопировано!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="h-4 w-4" />
-                          <span className="text-sm">Копировать код</span>
-                        </>
-                      )}
+                      <Download className="h-4 w-4" />
+                      Скачать входные данные
                     </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="flex items-center justify-center min-h-[400px]">
-                <div className="text-center px-4">
-                  <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Выберите задание</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Откройте меню и выберите задание для просмотра
-                  </p>
+                  )}
+                  <Button 
+                    variant="outline" 
+                    className="flex items-center gap-2 action-button"
+                    onClick={copyCode}
+                    disabled={copied}
+                  >
+                    {copied ? (
+                      <>
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        Скопировано!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-4 w-4" />
+                        Копировать код
+                      </>
+                    )}
+                  </Button>
                 </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Выберите задание</h3>
+                <p className="text-muted-foreground">Выберите задание из бокового меню для просмотра</p>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </main>
 
         {/* Footer */}
-        <footer className="border-t bg-card p-3 sm:p-4">
-          <p className="text-center text-muted-foreground text-xs">
-            © 2025 Задания по информатике. Создано для учебных целей.
+        <footer className="border-t bg-card p-4">
+          <p className="text-center text-muted-foreground text-sm">
+            © 2025 StasikHub.
           </p>
         </footer>
       </div>
