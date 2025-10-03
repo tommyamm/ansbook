@@ -21,7 +21,9 @@ import {
   Menu,
   X,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Sun,
+  Moon
 } from 'lucide-react'
 import './App.css'
 import 'highlight.js/styles/github.css'
@@ -36,6 +38,20 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [expandedTypes, setExpandedTypes] = useState({})
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode')
+    if (saved !== null) return JSON.parse(saved)
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode))
+    if (darkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [darkMode])
 
   useEffect(() => {
     setSidebarOpen(!isMobile)
@@ -231,7 +247,7 @@ function App() {
               <Menu className="h-4 w-4" />
             </Button>
             <BookOpen className="h-6 w-6 text-primary" />
-            <div>
+            <div className="flex-1">
               <h1 className="text-2xl font-bold text-foreground">StasikHub</h1>
             </div>
             <div className="flex items-center gap-2">
@@ -251,6 +267,14 @@ function App() {
                 @macronx
               </Button>
             </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setDarkMode(!darkMode)}
+              className="ml-auto"
+            >
+              {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
           </div>
         </header>
 
