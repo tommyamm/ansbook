@@ -9,7 +9,6 @@ const tasksData = [
        {
         "name": "Огурец",
         "mdFile": "type_2/ogurets/ogurets.md",
-        "dataFile": "type_2/ogurets/26_21719.txt"
       },
     ]
   },
@@ -18,7 +17,8 @@ const tasksData = [
     "tasks": [
       {
         "name": "ОлегМонгол",
-        "mdFile": "type_26/olegmongol/olegmongol.md"
+        "mdFile": "type_26/olegmongol/olegmongol.md",
+        "dataFile": "type_26/ogurets/26_21719.txt",
       }
     ]
   },
