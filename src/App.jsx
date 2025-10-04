@@ -38,6 +38,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [expandedTypes, setExpandedTypes] = useState({})
+  
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('darkMode')
     if (saved !== null) return JSON.parse(saved)
@@ -300,7 +301,7 @@ function App() {
                       <FileText className="h-3 w-3" />
                       {tasks.find(type => type.tasks.some(task => task.name === currentTask.name))?.type}
                     </Badge>
-                    <Badge variant="outline">Python</Badge>
+                    <Badge variant="secondary">Python</Badge>
                   </div>
                 </div>
                 <Separator className="mt-4" />
