@@ -170,6 +170,27 @@
   color: rgb(var(--color-foreground));
 }
 
+/* Стили для LaTeX формул */
+.katex {
+  font-size: 1em;
+}
+
+.katex-display {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+/* Адаптивность для формул */
+@media (max-width: 768px) {
+  .katex {
+    font-size: 0.9em;
+  }
+  
+  .katex-display {
+    margin: 0.75rem 0;
+  }
+}
+
 /* Улучшенные стили для кода */
 .prose code:not(.hljs) {
   background-color: rgb(var(--color-muted));

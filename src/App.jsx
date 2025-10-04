@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
+import 'katex/dist/katex.min.css'
+import { InlineMath, BlockMath } from 'react-katex'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
@@ -27,6 +29,37 @@ import {
 } from 'lucide-react'
 import './App.css'
 import 'highlight.js/styles/github.css'
+
+// Функция для обработки LaTeX формул в тексте
+const processMathInText = (children) => {
+  if (typeof children === 'string') {
+    // Обрабатываем inline формулы $...$ и block формулы $$...$$
+    const parts = children.split(/(\$\$[^$]*\$\$|\$[^$]*\$)/g)
+    return parts.map((part, index) => {
+      if (part.startsWith('$$') && part.endsWith('$$')) {
+        // Block формула
+        const formula = part.slice(2, -2)
+        return <BlockMath key={index} math={formula} />
+      } else if (part.startsWith('$') && part.endsWith('$')) {
+        // Inline формула
+        const formula = part.slice(1, -1)
+        return <InlineMath key={index} math={formula} />
+      }
+      return part
+    })
+  }
+  
+  if (Array.isArray(children)) {
+    return children.map((child, index) => {
+      if (typeof child === 'string') {
+        return processMathInText(child)
+      }
+      return child
+    })
+  }
+  
+  return children
+}
 
 function App() {
   const { tasks, loading: tasksLoading, loadTaskContent, loadDataFile } = useTaskLoader()
@@ -314,7 +347,11 @@ function App() {
                     components={{
                       h3: ({node, ...props}) => <h3 className="text-xl font-bold text-primary mb-4 mt-6" {...props} />,
                       h4: ({node, ...props}) => <h4 className="text-lg font-semibold text-foreground mb-3 mt-5" {...props} />,
-                      p: ({node, ...props}) => <p className="mb-4 text-foreground leading-relaxed" {...props} />,
+                      p: ({node, children, ...props}) => {
+                        // Обрабатываем формулы в параграфах
+                        const processedChildren = processMathInText(children)
+                        return <p className="mb-4 text-foreground leading-relaxed" {...props}>{processedChildren}</p>
+                      },
                       code: ({node, className, children, ...props}) => {
                         const match = /language-(\w+)/.exec(className || '')
                         return match ? (
