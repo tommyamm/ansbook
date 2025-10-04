@@ -22,6 +22,21 @@ const tasksData = [
       }
     ]
   },
+  {
+    "type": "Тип 27",
+    "tasks": [
+      {
+        "name": "Бухляш",
+        "mdFile": "type_27/bukhlyash/bukhlyash.md",
+        "dataFile": "type_27/bukhlyash/27_A_23571.txt",
+      },
+      {
+        "name": "Бабакапа",
+        "mdFile": "type_27/babacapa/babacapa.md",
+        "dataFile": "type_27/babacapa/27B_18677.txt",
+      },
+    ]
+  },
 ]
 
 export const useTaskLoader = () => {

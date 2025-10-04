@@ -1,8 +1,8 @@
-### Задание 26 №21719  на КЕГЭ
+### №21719  на КЕГЭ
 
-В банке дистанционной проверяющей системы имеется более **100 000** заданий. Все задачи пронумерованы начиная с единицы. Эти задания в течение учебного периода решают участники различных курсов. Каждому студенту при регистрации присваивается уникальный идентификатор — натуральное число, не превышающее **1 000 000**.  Студент
-может сдать несколько различных правильных решений одной задачи, при этом в зачёт идёт только одно из них.
+В банке дистанционной проверяющей системы имеется более **100 000** заданий. Все задачи пронумерованы начиная с единицы. Эти задания в течение учебного периода решают участники различных курсов. Каждому студенту при регистрации присваивается уникальный идентификатор — натуральное число, не превышающее **1 000 000**.  Студент может сдать несколько различных правильных решений одной задачи, при этом в зачёт идёт только одно из них.
 Преподаватель сделал выгрузку результатов за некоторый период времени и выбрал студента, который решил наибольшее количество задач из банка через одну (одну решил, следующую нет и т.д.).
+
 Определите идентификационный номер студента, который решил наибольшее количество задач через одну, и количество решённых им задач. Если несколько студентов решили одинаковое максимальное количество задач, то укажите студента с наименьшим идентификационным номером.
 
 **Входные данные**
@@ -13,59 +13,43 @@
 
 #### Решение
 ```python
-with open("26_21719.txt", "r") as file:
+with open("/home/stas/Downloads/26_21719.txt", "r") as file:
     data = [list(map(int, i.split(' '))) for i in file.readlines()][1:]
 
-def group(mas):
-    if not mas:
-        return []
-    
-    result = []
-    current = [mas[0]]
-    
-    for i in range(1, len(mas)):
-        if mas[i] == current[-1] + 2:
-            current.append(mas[i])
-        else:
-            if len(current) >= 2:
-                result.append(current)
-            current = [mas[i]]
+def find_longest_sequence(tasks):
+    max_count = 0
 
-    if len(current) >= 2:
-        result.append(current)
-        
-    return result
+    count = 0
+    for i in range(1, len(tasks)):
+        if tasks[i - 1] + 2 == tasks[i]:
+            count += 1
+        else:
+            count += 1 
+            if count > max_count:
+                max_count = count
+            count = 0
+    return max_count
 
 table = {}
 for line in data:
     student, task = line 
 
     if student not in table:
-        table[student] = [task]
-        continue
-    
-    # Дубликаты не добавляем
-    if task in table[student]:
-        continue
+        table[student] = set()
+    table[student].add(task)
 
-    table[student].append(task)
+max_count = float('-inf')
+max_id    = float('inf')
+for student, tasks in sorted(table.items()):
+    tasks = sorted(tasks)
+    tasks = find_longest_sequence(tasks)
 
-new_table = {}
-for student in table:
-    if not table[student]:
-        continue
+    if tasks > max_count:
+        max_count = tasks
+        max_id = student
 
-    table[student] = sorted(table[student])
-    table[student] = group(table[student])
-    table[student] = sorted(table[student], key=len)
+    if tasks == max_count and student < max_id:
+        max_id = student
 
-    if not table[student]:
-        continue
-
-    listWithMaxElems = table[student][-1]
-    new_table[student] = len(listWithMaxElems)
-
-for student in sorted(new_table):
-    print(student, new_table[student])
-    break
+print(max_id, max_count)
 ```
