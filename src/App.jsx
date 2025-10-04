@@ -395,6 +395,7 @@ function App() {
                               onError={() => setImageError(true)}
                               {...props}
                             />
+                            {/* Подпись для изображений*/}
                             {alt && (
                               <p className="text-sm text-muted-foreground mt-2 text-center italic max-w-md">
                                 {alt}

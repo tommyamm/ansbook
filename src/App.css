@@ -164,6 +164,10 @@
   color: #60a5fa !important; /* голубой для заголовков функций */
 }
 
+.hljs-literal {
+  color: #f472b6 !important; /* розовый для литералов (True, False, None) */
+}
+
 /* Стили для математических формул */
 .prose strong {
   font-weight: 600;
