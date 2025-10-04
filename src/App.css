@@ -191,6 +191,29 @@
   }
 }
 
+/* Стили для изображений */
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  border: 1px solid rgb(var(--color-border));
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.prose img:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px -5px rgb(0 0 0 / 0.15), 0 12px 20px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Адаптивность для изображений */
+@media (max-width: 768px) {
+  .prose img {
+    margin: 1rem 0;
+    box-shadow: 0 4px 12px -2px rgb(0 0 0 / 0.1);
+  }
+}
+
 /* Улучшенные стили для кода */
 .prose code:not(.hljs) {
   background-color: rgb(var(--color-muted));

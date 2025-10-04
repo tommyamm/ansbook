@@ -369,6 +369,40 @@ function App() {
                           <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4" {...props} />
                         </div>
                       ),
+                      img: ({node, src, alt, ...props}) => {
+                        const [imageError, setImageError] = useState(false)
+                        
+                        if (imageError) {
+                          return (
+                            <div className="flex flex-col items-center my-6 p-8 border-2 border-dashed border-muted-foreground rounded-lg">
+                              <p className="text-muted-foreground text-center">
+                                Изображение не загружено: {alt || 'изображение'}
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-2">
+                                Путь: {src}
+                              </p>
+                            </div>
+                          )
+                        }
+                        
+                        return (
+                          <div className="flex flex-col items-center my-6">
+                            <img 
+                              src={src} 
+                              alt={alt} 
+                              className="max-w-full h-auto rounded-lg shadow-lg border border-border"
+                              loading="lazy"
+                              onError={() => setImageError(true)}
+                              {...props}
+                            />
+                            {alt && (
+                              <p className="text-sm text-muted-foreground mt-2 text-center italic max-w-md">
+                                {alt}
+                              </p>
+                            )}
+                          </div>
+                        )
+                      },
                       strong: ({node, ...props}) => <strong className="font-semibold text-foreground" {...props} />,
                       blockquote: ({node, ...props}) => (
                         <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground my-4" {...props} />
