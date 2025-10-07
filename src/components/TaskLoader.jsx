@@ -12,7 +12,17 @@ const tasksData = [
       },
     ]
   },
-    {
+  {
+    "type": "Тип 24",
+    "tasks": [
+      {
+        "name": "Тибидок",
+        "mdFile": "type_24/tibidok/tibidok.md",
+        // "dataFile": "type_24/tibidok/24_21717.txt",
+      }
+    ]
+  },
+  {
     "type": "Тип 26",
     "tasks": [
       {
