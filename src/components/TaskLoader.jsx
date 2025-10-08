@@ -28,7 +28,7 @@ const tasksData = [
       {
         "name": "ОлегМонгол",
         "mdFile": "type_26/olegmongol/olegmongol.md",
-        "dataFile": "type_26/olegmongol/26_21719.txt",
+        // "dataFile": "type_26/olegmongol/26_21719.txt",
       }
     ]
   },
@@ -38,12 +38,12 @@ const tasksData = [
       {
         "name": "Бухляш",
         "mdFile": "type_27/bukhlyash/bukhlyash.md",
-        "dataFile": "type_27/bukhlyash/27_A_23571.txt",
+        // "dataFile": "type_27/bukhlyash/27_A_23571.txt",
       },
       {
         "name": "Бабакапа",
         "mdFile": "type_27/babacapa/babacapa.md",
-        "dataFile": "type_27/babacapa/27B_18677.txt",
+        // "dataFile": "type_27/babacapa/27B_18677.txt",
       },
     ]
   },

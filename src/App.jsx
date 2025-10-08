@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input.jsx'
 import { ScrollArea } from '@/components/ui/scroll-area.jsx'
 import { useTaskLoader } from '@/components/TaskLoader.jsx'
 import { useIsMobile } from '@/hooks/use-mobile.js'
+import { useTaskNavigation } from '@/hooks/useTaskNavigation.js'
 import HomePage from '@/components/HomePage.jsx'
 import TaskPage from '@/components/TaskPage.jsx'
 import {
@@ -17,14 +18,20 @@ import {
   ChevronRight,
   Sun,
   Moon,
-  FileText
+  FileText,
+  Home,
+  ChevronLeft,
+  ChevronRight as ChevronRightIcon // Renamed to avoid conflict
 } from 'lucide-react'
 import './App.css'
+import { Separator } from './components/ui/separator'
+import { Badge } from './components/ui/badge'
 
 function App() {
   const { tasks, loading: tasksLoading } = useTaskLoader()
   const isMobile = useIsMobile()
   const location = useLocation()
+  const { allTasks, currentTaskIndex, currentTask, navigateToTask, goHome } = useTaskNavigation()
   const [searchTerm, setSearchTerm] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [expandedTypes, setExpandedTypes] = useState({})
@@ -34,6 +41,7 @@ function App() {
     if (saved !== null) return JSON.parse(saved)
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   })
+  // const navigate = navigate(); // Добавляем useNavigate
 
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode))
@@ -199,10 +207,10 @@ function App() {
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="border-b bg-card p-4">
+        <header className="border-b bg-card p-4 flex-shrink-0">
           <div className="flex items-center gap-3">
             <Button
               variant="ghost"
@@ -247,8 +255,60 @@ function App() {
           </div>
         </header>
 
+        {/* Task Navigation Bar - только для страниц задач */}
+        {currentTask && (
+          <div className="border-b bg-card p-4">
+            <div className="max-w-4xl mx-auto flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={goHome}
+                  className="flex items-center gap-2"
+                >
+                  <Home className="h-4 w-4" />
+                  Главная
+                </Button>
+                <Separator orientation="vertical" className="h-6" />
+                <div className="flex items-center gap-2">
+                  {/* <Badge variant="secondary" className="flex items-center gap-1">
+                    <FileText className="h-3 w-3" />
+                    {currentTask.type}
+                  </Badge> */}
+                  {/* <span className="text-muted-foreground">•</span> */}
+                  {/* <span className="font-medium">{currentTask.name}</span> */}
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigateToTask('prev')}
+                  disabled={currentTaskIndex <= 0}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Назад
+                </Button>
+                {/* <span className="text-sm text-muted-foreground px-2">
+                  {currentTaskIndex + 1} из {allTasks.length}
+                </span> */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigateToTask('next')}
+                  disabled={currentTaskIndex >= allTasks.length - 1}
+                >
+                  Вперед
+                  <ChevronRightIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Routes with Animation */}
-        <main className="flex-1 overflow-auto relative">
+        <main className="flex-1 relative overflow-hidden">
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
               <Route
@@ -259,7 +319,7 @@ function App() {
                     initial="initial"
                     animate="animate"
                     exit="exit"
-                    className="absolute w-full"
+                    className="absolute w-full h-full overflow-y-auto"
                   >
                     <HomePage />
                   </motion.div>
@@ -267,28 +327,11 @@ function App() {
               />
               <Route
                 path="/:taskSlug"
-                element={
-                  <motion.div
-                    variants={pageVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    className="absolute w-full"
-                  >
-                    <TaskPage />
-                  </motion.div>
-                }
+                element={<TaskPage />}
               />
             </Routes>
           </AnimatePresence>
         </main>
-
-        {/* Footer */}
-        <footer className="border-t bg-card p-4">
-          <p className="text-center text-muted-foreground text-sm">
-            © 2025 StasikHub.
-          </p>
-        </footer>
       </div>
     </div>
   )

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
@@ -16,8 +17,6 @@ import {
   Copy,
   CheckCircle,
   FileText,
-  ChevronLeft,
-  ChevronRight,
   Home
 } from 'lucide-react'
 import 'highlight.js/styles/github.css'
@@ -61,39 +60,35 @@ function TaskPage() {
   const [taskContent, setTaskContent] = useState('')
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
-  const [allTasks, setAllTasks] = useState([])
-  const [currentTaskIndex, setCurrentTaskIndex] = useState(-1)
-
-  // Создаем плоский список всех задач для навигации
-  useEffect(() => {
-    if (tasks.length > 0) {
-      const flatTasks = []
-      tasks.forEach(type => {
-        type.tasks.forEach(task => {
-          flatTasks.push({
-            ...task,
-            type: type.type,
-            slug: task.mdFile.split('/')[1] // Используем название директории как slug
-          })
-        })
-      })
-      setAllTasks(flatTasks)
-    }
-  }, [tasks])
 
   // Находим текущую задачу по slug
   useEffect(() => {
-    if (allTasks.length > 0 && taskSlug) {
-      const taskIndex = allTasks.findIndex(task => task.slug === taskSlug)
-      if (taskIndex !== -1) {
-        setCurrentTaskIndex(taskIndex)
-        setCurrentTask(allTasks[taskIndex])
+    if (tasks.length > 0 && taskSlug) {
+      let foundTask = null
+      
+      for (const type of tasks) {
+        for (const task of type.tasks) {
+          const taskSlugFromFile = task.mdFile.split('/')[1]
+          if (taskSlugFromFile === taskSlug) {
+            foundTask = {
+              ...task,
+              type: type.type,
+              slug: taskSlugFromFile
+            }
+            break
+          }
+        }
+        if (foundTask) break
+      }
+      
+      if (foundTask) {
+        setCurrentTask(foundTask)
       } else {
         // Если задача не найдена, перенаправляем на главную
         navigate('/')
       }
     }
-  }, [allTasks, taskSlug, navigate])
+  }, [tasks, taskSlug, navigate])
 
   // Загружаем содержимое задачи
   useEffect(() => {
@@ -148,17 +143,6 @@ function TaskPage() {
     }
   }
 
-  const navigateToTask = (direction) => {
-    const newIndex = direction === 'prev' ? currentTaskIndex - 1 : currentTaskIndex + 1
-    if (newIndex >= 0 && newIndex < allTasks.length) {
-      const newTask = allTasks[newIndex]
-      navigate(`/${newTask.slug}`)
-    }
-  }
-
-  const goHome = () => {
-    navigate('/')
-  }
 
   if (tasksLoading) {
     return (
@@ -188,7 +172,7 @@ function TaskPage() {
         <div className="text-center">
           <h3 className="text-lg font-semibold mb-2">Задание не найдено</h3>
           <p className="text-muted-foreground mb-4">Запрашиваемое задание не существует</p>
-          <Button onClick={goHome}>
+          <Button onClick={() => navigate('/')}>
             <Home className="h-4 w-4 mr-2" />
             На главную
           </Button>
@@ -198,59 +182,13 @@ function TaskPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background relative">
-      {/* Navigation Bar */}
-      <div className="border-b bg-card p-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={goHome}
-              className="flex items-center gap-2"
-            >
-              <Home className="h-4 w-4" />
-              Главная
-            </Button>
-            <Separator orientation="vertical" className="h-6" />
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="flex items-center gap-1">
-                <FileText className="h-3 w-3" />
-                {currentTask.type}
-              </Badge>
-              <span className="text-muted-foreground">•</span>
-              <span className="font-medium">{currentTask.name}</span>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigateToTask('prev')}
-              disabled={currentTaskIndex <= 0}
-            >
-              <ChevronLeft className="h-4 w-4" />
-              Назад
-            </Button>
-            <span className="text-sm text-muted-foreground px-2">
-              {currentTaskIndex + 1} из {allTasks.length}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigateToTask('next')}
-              disabled={currentTaskIndex >= allTasks.length - 1}
-            >
-              Вперед
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Task Content */}
-      <main className="p-6">
+    <motion.div 
+      className="p-6"
+      initial={{ y: "-100vh", opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: "100vh", opacity: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
         <Card className="max-w-4xl mx-auto card-hover">
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -376,8 +314,7 @@ function TaskPage() {
             </div>
           </CardContent>
         </Card>
-      </main>
-    </div>
+    </motion.div>
   )
 }
 
