@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from '@/components/ui/button.jsx'
 import { Input } from '@/components/ui/input.jsx'
 import { ScrollArea } from '@/components/ui/scroll-area.jsx'
@@ -7,8 +8,8 @@ import { useTaskLoader } from '@/components/TaskLoader.jsx'
 import { useIsMobile } from '@/hooks/use-mobile.js'
 import HomePage from '@/components/HomePage.jsx'
 import TaskPage from '@/components/TaskPage.jsx'
-import { 
-  BookOpen, 
+import {
+  BookOpen,
   Search,
   Menu,
   X,
@@ -49,7 +50,6 @@ function App() {
 
   useEffect(() => {
     if (tasks.length > 0) {
-      // Разворачиваем все типы по умолчанию
       const expanded = {}
       tasks.forEach(type => {
         expanded[type.type] = true
@@ -58,7 +58,6 @@ function App() {
     }
   }, [tasks])
 
-  // Закрываем sidebar на мобильных устройствах при смене маршрута
   useEffect(() => {
     if (isMobile) {
       setSidebarOpen(false)
@@ -89,6 +88,23 @@ function App() {
       </div>
     )
   }
+
+  const pageVariants = {
+    initial: {
+      y: "-100vh",
+      opacity: 0,
+    },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.3, ease: "easeOut" }, // Равнозамедленное появление
+    },
+    exit: {
+      y: "100vh",
+      opacity: 0,
+      transition: { duration: 0.3, ease: "easeIn" }, // Равноускоренное исчезновение
+    },
+  };
 
   return (
     <div className="min-h-screen bg-background flex relative">
@@ -231,12 +247,40 @@ function App() {
           </div>
         </header>
 
-        {/* Routes */}
-        <main className="flex-1 overflow-auto">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/:taskSlug" element={<TaskPage />} />
-          </Routes>
+        {/* Routes with Animation */}
+        <main className="flex-1 overflow-auto relative">
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route
+                path="/"
+                element={
+                  <motion.div
+                    variants={pageVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    className="absolute w-full"
+                  >
+                    <HomePage />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/:taskSlug"
+                element={
+                  <motion.div
+                    variants={pageVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    className="absolute w-full"
+                  >
+                    <TaskPage />
+                  </motion.div>
+                }
+              />
+            </Routes>
+          </AnimatePresence>
         </main>
 
         {/* Footer */}

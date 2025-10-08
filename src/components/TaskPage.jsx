@@ -10,11 +10,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.j
 import { Badge } from '@/components/ui/badge.jsx'
 import { Separator } from '@/components/ui/separator.jsx'
 import { useTaskLoader } from '@/components/TaskLoader.jsx'
-import { 
-  Code, 
-  Download, 
-  Copy, 
-  CheckCircle, 
+import {
+  Code,
+  Download,
+  Copy,
+  CheckCircle,
   FileText,
   ChevronLeft,
   ChevronRight,
@@ -198,7 +198,7 @@ function TaskPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
       {/* Navigation Bar */}
       <div className="border-b bg-card p-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
