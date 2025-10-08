@@ -12,7 +12,7 @@ function HomePage() {
           <h1 className="text-4xl font-bold text-foreground">StasikHub</h1>
         </div>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Добро пожаловать в StasikHub — платформу для изучения и решения задач по программированию
+          Добро пожаловать в StasikHub — здесь можно посмотеть шаблон решения задач из ЕГЭ по информатике.
         </p>
       </div>
 
@@ -27,8 +27,8 @@ function HomePage() {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground leading-relaxed">
-              StasikHub — это образовательная платформа, созданная для помощи в изучении алгоритмов и структур данных. 
-              Здесь собраны задачи различной сложности с подробными объяснениями и примерами решений на Python.
+              StasikHub — это платформа, созданная для помощи в подготовке к ЕГЭ по информатике. 
+              Здесь вы найдете задачи, сгруппированные по типам, с решениями на Python.
             </p>
           </CardContent>
         </Card>
@@ -42,9 +42,7 @@ function HomePage() {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground leading-relaxed">
-              Наша цель — сделать изучение программирования более доступным и интересным. 
-              Мы предоставляем структурированные материалы, которые помогают развивать навыки решения задач 
-              и понимание алгоритмического мышления.
+              Моя цель — сохранить и систематизировать решения, чтобы у вас всегда был доступ к ним.
             </p>
           </CardContent>
         </Card>
@@ -63,7 +61,7 @@ function HomePage() {
               </div>
               <h3 className="font-semibold mb-2">Структурированные задачи</h3>
               <p className="text-sm text-muted-foreground">
-                Задачи организованы по типам и сложности для удобного изучения
+                Задачи организованы по типам для удобного просмотра
               </p>
             </div>
             <div className="text-center p-4">
@@ -95,9 +93,8 @@ function HomePage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-muted-foreground">
-            Выберите интересующую вас категорию задач в боковом меню и начните изучение. 
-            Каждая задача содержит подробное описание, примеры входных и выходных данных, 
-            а также готовое решение с объяснениями.
+            Выберите интересующую вас категорию задач в боковом меню и начните просмотр. 
+            Каждая задача содержит подробное описание а также готовое решение с объяснениями.
           </p>
           {/* <div className="flex flex-wrap gap-3">
             <Button 
@@ -123,7 +120,7 @@ function HomePage() {
         <CardContent>
           <p className="text-muted-foreground mb-4">
             Если у вас возникли вопросы, вы нашли ошибку или хотите предложить улучшение, 
-            не стесняйтесь обращаться к нам в Telegram. Мы всегда рады помочь!
+            не стесняйтесь обращаться в Telegram. Я всегда рад помочь!
           </p>
           <Button 
             className="flex items-center gap-2"
