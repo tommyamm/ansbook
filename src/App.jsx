@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import rehypeHighlight from 'rehype-highlight'
 import 'katex/dist/katex.min.css'
-import { InlineMath, BlockMath } from 'react-katex'
+import MarkdownRenderer from '@/components/MarkdownRenderer.jsx'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
@@ -32,36 +29,6 @@ import {
 import './App.css'
 import 'highlight.js/styles/github.css'
 
-// Функция для обработки LaTeX формул в тексте
-const processMathInText = (children) => {
-  if (typeof children === 'string') {
-    // Обрабатываем inline формулы $...$ и block формулы $$...$$
-    const parts = children.split(/(\$\$[^$]*\$\$|\$[^$]*\$)/g)
-    return parts.map((part, index) => {
-      if (part.startsWith('$$') && part.endsWith('$$')) {
-        // Block формула
-        const formula = part.slice(2, -2)
-        return <BlockMath key={index} math={formula} />
-      } else if (part.startsWith('$') && part.endsWith('$')) {
-        // Inline формула
-        const formula = part.slice(1, -1)
-        return <InlineMath key={index} math={formula} />
-      }
-      return part
-    })
-  }
-  
-  if (Array.isArray(children)) {
-    return children.map((child, index) => {
-      if (typeof child === 'string') {
-        return processMathInText(child)
-      }
-      return child
-    })
-  }
-  
-  return children
-}
 
 function App() {
   const { tasks, loading: tasksLoading, loadTaskContent } = useTaskLoader()
@@ -313,79 +280,7 @@ function App() {
                 <Separator className="mt-4" />
               </CardHeader>
               <CardContent>
-                <div className="prose prose-slate dark:prose-invert max-w-none">
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    rehypePlugins={[rehypeHighlight]}
-                    components={{
-                      h3: ({node, ...props}) => <h3 className="text-xl font-bold text-primary mb-4 mt-6" {...props} />,
-                      h4: ({node, ...props}) => <h4 className="text-lg font-semibold text-foreground mb-3 mt-5" {...props} />,
-                      p: ({node, children, ...props}) => {
-                        // Обрабатываем формулы в параграфах
-                        const processedChildren = processMathInText(children)
-                        return <p className="mb-4 text-foreground leading-relaxed" {...props}>{processedChildren}</p>
-                      },
-                      code: ({node, className, children, ...props}) => {
-                        const match = /language-(\w+)/.exec(className || '')
-                        return match ? (
-                          <code className={className} {...props}>
-                            {children}
-                          </code>
-                        ) : (
-                          <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
-                            {children}
-                          </code>
-                        )
-                      },
-                      pre: ({node, ...props}) => (
-                        <div className="relative">
-                          <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4" {...props} />
-                        </div>
-                      ),
-                      img: ({node, src, alt, ...props}) => {
-                        const [imageError, setImageError] = useState(false)
-                        
-                        if (imageError) {
-                          return (
-                            <div className="flex flex-col items-center my-6 p-8 border-2 border-dashed border-muted-foreground rounded-lg">
-                              <p className="text-muted-foreground text-center">
-                                Изображение не загружено: {alt || 'изображение'}
-                              </p>
-                              <p className="text-xs text-muted-foreground mt-2">
-                                Путь: {src}
-                              </p>
-                            </div>
-                          )
-                        }
-                        
-                        return (
-                          <div className="flex flex-col items-center my-6">
-                            <img 
-                              src={src} 
-                              alt={alt} 
-                              className="max-w-full h-auto rounded-lg shadow-lg border border-border"
-                              loading="lazy"
-                              onError={() => setImageError(true)}
-                              {...props}
-                            />
-                            {/* Подпись для изображений*/}
-                            {alt && (
-                              <p className="text-sm text-muted-foreground mt-2 text-center italic max-w-md">
-                                {alt}
-                              </p>
-                            )}
-                          </div>
-                        )
-                      },
-                      strong: ({node, ...props}) => <strong className="font-semibold text-foreground" {...props} />,
-                      blockquote: ({node, ...props}) => (
-                        <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground my-4" {...props} />
-                      ),
-                    }}
-                  >
-                    {taskContent}
-                  </ReactMarkdown>
-                </div>
+                <MarkdownRenderer content={taskContent} />
                 
                 {/* Action buttons */}
                 {/* <div className="flex flex-wrap gap-3 mt-8 pt-6 border-t">
