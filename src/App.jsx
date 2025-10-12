@@ -250,7 +250,12 @@ function App() {
             </Button>
             <BookOpen className="h-6 w-6 text-primary" />
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-foreground">StasikHub</h1>
+              <h1 
+                className="text-2xl font-bold text-foreground cursor-pointer hover:text-primary transition-colors"
+                onClick={() => setCurrentTask(null)}
+              >
+                StasikHub
+              </h1>
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -411,7 +416,12 @@ function App() {
               <div className="text-center space-y-4">
                 <div className="flex items-center justify-center gap-3 mb-6">
                   <BookOpen className="h-12 w-12 text-primary" />
-                  <h1 className="text-4xl font-bold text-foreground">StasikHub</h1>
+                  <h1 
+                    className="text-4xl font-bold text-foreground cursor-pointer hover:text-primary transition-colors"
+                    onClick={() => setCurrentTask(null)}
+                  >
+                    StasikHub
+                  </h1>
                 </div>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                   Добро пожаловать в StasikHub — здесь можно посмотеть шаблон решения задач из ЕГЭ по информатике.
