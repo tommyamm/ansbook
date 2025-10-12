@@ -50,7 +50,7 @@ const processMathInText = (children) => {
   }
   
   if (Array.isArray(children)) {
-    return children.map((child, index) => {
+    return children.map((child, ) => {
       if (typeof child === 'string') {
         return processMathInText(child)
       }
@@ -62,7 +62,7 @@ const processMathInText = (children) => {
 }
 
 function App() {
-  const { tasks, loading: tasksLoading, loadTaskContent, loadDataFile } = useTaskLoader()
+  const { tasks, loading: tasksLoading, loadTaskContent } = useTaskLoader()
   const isMobile = useIsMobile()
   const [currentTask, setCurrentTask] = useState(null)
   const [taskContent, setTaskContent] = useState('')
@@ -91,20 +91,20 @@ function App() {
     setSidebarOpen(!isMobile)
   }, [isMobile])
 
-  useEffect(() => {
-    if (tasks.length > 0) {
-      // Разворачиваем все типы по умолчанию
-      const expanded = {}
-      tasks.forEach(type => {
-        expanded[type.type] = true
-      })
-      setExpandedTypes(expanded)
+  // useEffect(() => {
+  //   if (tasks.length > 0) {
+  //     // Разворачиваем все типы по умолчанию
+  //     const expanded = {}
+  //     tasks.forEach(type => {
+  //       expanded[type.type] = true
+  //     })
+  //     setExpandedTypes(expanded)
       
-      if (tasks[0].tasks.length > 0) {
-        loadTask(tasks[0].tasks[0])
-      }
-    }
-  }, [tasks])
+  //     if (tasks[0].tasks.length > 0) {
+  //       loadTask(tasks[0].tasks[0])
+  //     }
+  //   }
+  // }, [tasks])
 
   const loadTask = async (task) => {
     setCurrentTask(task)
@@ -123,40 +123,6 @@ function App() {
       setTaskContent('# Ошибка загрузки задания\n\nНе удалось загрузить содержимое задания.')
     }
     setLoading(false)
-  }
-
-  const copyCode = async () => {
-    const codeMatch = taskContent.match(/```python\n([\s\S]*?)\n```/)
-    if (codeMatch) {
-      try {
-        await navigator.clipboard.writeText(codeMatch[1])
-        setCopied(true)
-        setTimeout(() => setCopied(false), 1700)
-      } catch (err) {
-        console.error('Ошибка копирования:', err)
-      }
-    }
-  }
-
-  const downloadDataFile = async () => {
-    if (currentTask?.dataFile) {
-      try {
-        const content = await loadDataFile(currentTask)
-        if (content) {
-          const blob = new Blob([content], { type: 'text/plain' })
-          const url = URL.createObjectURL(blob)
-          const a = document.createElement('a')
-          a.href = url
-          a.download = currentTask.dataFile.split('/').pop()
-          document.body.appendChild(a)
-          a.click()
-          document.body.removeChild(a)
-          URL.revokeObjectURL(url)
-        }
-      } catch (error) {
-        console.error('Ошибка скачивания файла:', error)
-      }
-    }
   }
 
   const toggleTypeExpansion = (typeTitle) => {
@@ -199,7 +165,7 @@ function App() {
         ${isMobile 
           ? `fixed left-0 top-0 h-full z-50 transform transition-transform duration-300 ${
               sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-            } w-80` 
+            } w-80`
           : `${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300`
         } 
         border-r bg-card overflow-hidden
@@ -415,17 +381,7 @@ function App() {
                 </div>
                 
                 {/* Action buttons */}
-                <div className="flex flex-wrap gap-3 mt-8 pt-6 border-t">
-                  {currentTask.dataFile && (
-                    <Button 
-                      variant="outline" 
-                      className="flex items-center gap-2 action-button"
-                      onClick={downloadDataFile}
-                    >
-                      <Download className="h-4 w-4" />
-                      Скачать входные данные
-                    </Button>
-                  )}
+                {/* <div className="flex flex-wrap gap-3 mt-8 pt-6 border-t">
                   <Button 
                     variant="outline" 
                     className="flex items-center gap-2 action-button"
@@ -444,7 +400,7 @@ function App() {
                       </>
                     )}
                   </Button>
-                </div>
+                </div> */}
               </CardContent>
             </Card>
           ) : (
@@ -459,11 +415,11 @@ function App() {
         </main>
 
         {/* Footer */}
-        <footer className="border-t bg-card p-4">
+        {/* <footer className="border-t bg-card p-4">
           <p className="text-center text-muted-foreground text-sm">
             © 2025 StasikHub.
           </p>
-        </footer>
+        </footer> */}
       </div>
     </div>
   )
