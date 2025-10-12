@@ -3,6 +3,8 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import { InlineMath, BlockMath } from 'react-katex'
+import { useMarkdownRenderer, useMarkdownValidation } from '@/hooks/useMarkdownRenderer.js'
+import './MarkdownRenderer.css'
 
 // Функция для обработки LaTeX формул в тексте
 const processMathInText = (children) => {
@@ -101,6 +103,18 @@ const ParagraphComponent = ({ node, children, ...props }) => {
 
 // Основной компонент MarkdownRenderer
 const MarkdownRenderer = ({ content, className = "" }) => {
+  const processedContent = useMarkdownRenderer(content)
+  const { isValid, error } = useMarkdownValidation(content)
+
+  // Проверяем валидность контента
+  if (!isValid) {
+    return (
+      <div className="text-muted-foreground italic p-4 border border-destructive/20 rounded-lg bg-destructive/5">
+        {error}
+      </div>
+    )
+  }
+
   return (
     <div className={`prose prose-slate dark:prose-invert max-w-none ${className}`}>
       <ReactMarkdown
@@ -135,8 +149,12 @@ const MarkdownRenderer = ({ content, className = "" }) => {
           ),
           
           // Списки
-          ul: ({ node, ...props }) => <ul className="list-disc list-inside mb-4 space-y-1" {...props} />,
-          ol: ({ node, ...props }) => <ol className="list-decimal list-inside mb-4 space-y-1" {...props} />,
+          ul: ({ node, ...props }) => (
+            <ul className="markdown-list mb-4 space-y-1" {...props} />
+          ),
+          ol: ({ node, ...props }) => (
+            <ol className="markdown-list-ordered mb-4 space-y-1" {...props} />
+          ),
           li: ({ node, ...props }) => <li className="text-foreground" {...props} />,
           
           // Таблицы
@@ -169,7 +187,7 @@ const MarkdownRenderer = ({ content, className = "" }) => {
           hr: ({ node, ...props }) => <hr className="border-border my-6" {...props} />,
         }}
       >
-        {content}
+        {processedContent}
       </ReactMarkdown>
     </div>
   )
