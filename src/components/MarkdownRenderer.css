@@ -1,3 +1,7 @@
+/* ------------------------------------------------------------------------------------ */
+
+
+
 /* Стили для markdown списков */
 .markdown-list {
   list-style-type: disc;
@@ -57,3 +61,119 @@
 .markdown-list-ordered li:last-child {
   margin-bottom: 0;
 }
+
+
+
+
+/* ------------------------------------------------------------------------------------ */
+
+
+
+
+/* Стили для подсветки синтаксиса Python */
+.hljs {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+.hljs-keyword {
+  color: #f472b6 !important; /* розовый для ключевых слов */
+}
+
+.hljs-string {
+  color: #34d399 !important; /* зеленый для строк */
+}
+
+.hljs-number {
+  color: #fbbf24 !important; /* желтый для чисел */
+}
+
+.hljs-comment {
+  color: #9ca3af !important; /* серый для комментариев */
+  font-style: italic;
+}
+
+/* Стили для переменных в f-строках */
+.hljs-variable {
+  color: #fbbf24 !important; /* желтый для переменных */
+}
+
+.hljs-name {
+  color: #fbbf24 !important; /* желтый для имен переменных */
+}
+
+.hljs-attr {
+  color: #8b5cf6 !important; /* фиолетовый для атрибутов */
+}
+
+.hljs-function {
+  color: #06b6d4 !important; /* голубой для функций */
+}
+
+.hljs-built_in {
+  color: #06b6d4 !important; /* голубой для встроенных функций */
+}
+
+.hljs-literal {
+  color: #f59e0b !important; /* оранжевый для литералов */
+}
+
+/* Специальные стили для f-строк в Python */
+.hljs-string .hljs-variable {
+  color: #fbbf24 !important; /* желтый для переменных в f-строках */
+}
+
+/* Альтернативные селекторы для переменных */
+.hljs-subst {
+  color: #fbbf24 !important; /* желтый для подстановок в f-строках */
+}
+
+.hljs-template-variable {
+  color: #fbbf24 !important; /* желтый для переменных в шаблонах */
+}
+
+/* Дополнительные стили для обеспечения видимости переменных */
+.hljs-string .hljs-subst,
+.hljs-string .hljs-variable,
+.hljs-string .hljs-template-variable {
+  color: #fbbf24 !important;
+  font-weight: bold;
+}
+
+/* Универсальный селектор для всех возможных классов переменных */
+.hljs-string [class*="variable"],
+.hljs-string [class*="subst"],
+.hljs-string [class*="template"] {
+  color: #fbbf24 !important;
+  font-weight: bold;
+}
+
+/* Стили для всех возможных комбинаций переменных в f-строках */
+.hljs-string .hljs-subst,
+.hljs-string .hljs-variable,
+.hljs-string .hljs-template-variable,
+.hljs-string .hljs-params,
+.hljs-string .hljs-name {
+  color: #fbbf24 !important;
+  font-weight: bold;
+}
+
+/* Дополнительная поддержка для highlight.js */
+.hljs-string .hljs-subst {
+  color: #fbbf24 !important;
+  font-weight: bold;
+}
+
+.hljs-title {
+  color: #60a5fa !important; /* голубой для заголовков функций */
+}
+
+
+
+/* ------------------------------------------------------------------------------------ */

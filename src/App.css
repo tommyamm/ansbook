@@ -119,54 +119,7 @@
   }
 }
 
-/* Стили для подсветки синтаксиса Python */
-.hljs {
-  background: #1e293b !important;
-  color: #e2e8f0 !important;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  overflow-x: auto;
-}
 
-.hljs-keyword {
-  color: #f472b6 !important; /* розовый для ключевых слов */
-}
-
-.hljs-string {
-  color: #34d399 !important; /* зеленый для строк */
-}
-
-.hljs-number {
-  color: #fbbf24 !important; /* желтый для чисел */
-}
-
-.hljs-comment {
-  color: #9ca3af !important; /* серый для комментариев */
-  font-style: italic;
-}
-
-.hljs-function {
-  color: #60a5fa !important; /* голубой для функций */
-}
-
-.hljs-built_in {
-  color: #a78bfa !important; /* фиолетовый для встроенных функций */
-}
-
-.hljs-variable {
-  color: #e2e8f0 !important; /* белый для переменных */
-}
-
-.hljs-title {
-  color: #60a5fa !important; /* голубой для заголовков функций */
-}
-
-.hljs-literal {
-  color: #f472b6 !important; /* розовый для литералов (True, False, None) */
-}
 
 /* Стили для математических формул */
 .prose strong {

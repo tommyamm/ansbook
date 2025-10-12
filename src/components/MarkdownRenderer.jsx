@@ -78,7 +78,7 @@ const ImageComponent = ({ src, alt, ...props }) => {
 const CodeComponent = ({ node, className, children, ...props }) => {
   const match = /language-(\w+)/.exec(className || '')
   return match ? (
-    <code className={className} {...props}>
+    <code className={`${className} hljs`} {...props}>
       {children}
     </code>
   ) : (
@@ -91,7 +91,7 @@ const CodeComponent = ({ node, className, children, ...props }) => {
 // Компонент для pre блоков
 const PreComponent = ({ node, ...props }) => (
   <div className="relative">
-    <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4" {...props} />
+    <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4 hljs" {...props} />
   </div>
 )
 
