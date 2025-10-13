@@ -95,7 +95,6 @@ def clear_data(data):
 
 Основная логика решения задачи
 ```python
-# -----------------------------------------------
 import matplotlib.pyplot as plt
 
 with open("27B_18677.txt", "r") as file:

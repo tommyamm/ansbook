@@ -20,7 +20,7 @@
 
 Давайте откроем файл и считаем все данные в переменную $data$.
 ```python
-with open("/home/stas/Downloads/27_A_23571.txt", "r") as file:
+with open("27_A_23571.txt", "r") as file:
     data = [i for i in file.readlines()]
 ```
 
