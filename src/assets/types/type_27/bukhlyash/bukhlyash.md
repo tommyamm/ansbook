@@ -53,6 +53,6 @@ plt.grid(True)  # Включаем сетку
 plt.show()      # Говорим matplotlib показать график
 ```
 После чего получаем представление данных файла A
-![Представление данных файла A](/ansbook/src/assets/types/type_27/bukhlyash/for_A.png)
+![Представление данных файла A](/src/assets/types/type_27/bukhlyash/for_A.png)
 
 PS: Пока лень дописывать, скоро все будет

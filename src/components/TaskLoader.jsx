@@ -71,7 +71,7 @@ export const useTaskLoader = () => {
   const loadTaskContent = async (task) => {
     try {
       // Пытаемся загрузить файл из assets
-      const response = await fetch(`/ansbook/src/assets/types/${task.mdFile}`)
+      const response = await fetch(`/src/assets/types/${task.mdFile}`)
       if (response.ok) {
         return await response.text()
       } else {

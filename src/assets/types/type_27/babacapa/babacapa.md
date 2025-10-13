@@ -27,7 +27,7 @@ def plot(data, color='blue'):
 ```
 
 Построит точечный график
-![График для файла Б](/ansbook/src/assets/types/type_27/babacapa/image.png)
+![График для файла Б](/src/assets/types/type_27/babacapa/image.png)
 
 Удобная функция для рассчета коэффициентов прямой по двум точкам
 ```python
