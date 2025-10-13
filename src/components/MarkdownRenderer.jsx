@@ -101,6 +101,12 @@ const ParagraphComponent = ({ node, children, ...props }) => {
   return <p className="mb-4 text-foreground leading-relaxed" {...props}>{processedChildren}</p>
 }
 
+// Компонент для элементов списка с обработкой формул
+const ListItemComponent = ({ node, children, ...props }) => {
+  const processedChildren = processMathInText(children)
+  return <li className="text-foreground" {...props}>{processedChildren}</li>
+}
+
 // Основной компонент MarkdownRenderer
 const MarkdownRenderer = ({ content, className = "" }) => {
   const processedContent = useMarkdownRenderer(content)
@@ -155,7 +161,7 @@ const MarkdownRenderer = ({ content, className = "" }) => {
           ol: ({ node, ...props }) => (
             <ol className="markdown-list-ordered mb-4 space-y-1" {...props} />
           ),
-          li: ({ node, ...props }) => <li className="text-foreground" {...props} />,
+          li: ListItemComponent,
           
           // Таблицы
           table: ({ node, ...props }) => (
