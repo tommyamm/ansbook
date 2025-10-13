@@ -13,6 +13,15 @@ const tasksData = [
     ]
   },
   {
+    "type": "Тип 14",
+    "tasks": [
+      {
+        "name": "Бублик",
+        "mdFile": "type_14/bublik/bublik.md",
+      }
+    ]
+  },
+  {
     "type": "Тип 24",
     "tasks": [
       {
