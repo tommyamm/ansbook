@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import 'katex/dist/katex.min.css'
 import MarkdownRenderer from '@/components/MarkdownRenderer.jsx'
+// import AnimatedBackground from '@/components/AnimatedBackground.jsx'
+import ConfettiEffect from '@/components/ConfettiEffect.jsx'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
@@ -24,7 +26,8 @@ import {
   Sun,
   Moon,
   Users,
-  MessageCircle
+  MessageCircle,
+  PartyPopper
 } from 'lucide-react'
 import './App.css'
 import 'highlight.js/styles/github.css'
@@ -40,6 +43,21 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [expandedTypes, setExpandedTypes] = useState({})
+  
+  // Состояния для эффектов
+  const [confettiTrigger, setConfettiTrigger] = useState(false)
+  const [confettiEnabled, setConfettiEnabled] = useState(false)
+
+  const toggleConfetti = () => {
+    setConfettiEnabled(prev => !prev)
+    setConfettiTrigger(prev => !prev)
+  }
+
+  const onConfettiComplete = () => {
+    setConfettiTrigger(false)
+  }
+
+  const [tasksCompleted, setTasksCompleted] = useState(0)
   
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('darkMode')
@@ -87,6 +105,9 @@ function App() {
     try {
       const content = await loadTaskContent(task)
       setTaskContent(content)
+      
+      // Увеличиваем счетчик выполненных задач
+      setTasksCompleted(prev => prev + 1)
     } catch (error) {
       console.error('Ошибка загрузки задания:', error)
       setTaskContent('# Ошибка загрузки задания\n\nНе удалось загрузить содержимое задания.')
@@ -121,6 +142,17 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background flex relative">
+      {/* Анимированный фон */}
+      {/* <AnimatedBackground /> */}
+      
+      {/* Конфетти эффект */}
+      {confettiEnabled && (
+        <ConfettiEffect 
+          trigger={confettiTrigger} 
+          // onComplete={onConfettiComplete} 
+        />
+      )}
+      
       {/* Overlay для мобильных устройств */}
       {isMobile && sidebarOpen && (
         <div 
@@ -206,7 +238,7 @@ function App() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="border-b bg-card p-4">
+<header className="border-b bg-card p-4 relative">
           <div className="flex items-center gap-3">
             <Button
               variant="ghost"
@@ -224,12 +256,21 @@ function App() {
                 StasikHub
               </h1>
             </div>
-            <div className="flex items-center gap-2">
+            <div className={`absolute top-1/2 -translate-y-1/2 flex items-center transition-all duration-300 ${sidebarOpen ? 'left-[calc(40%+10rem)] -translate-x-1/2' : 'left-1/2 -translate-x-1/2'}`}>
+              <Button
+                variant={confettiEnabled ? "secondary" : "ghost"}
+                size="sm"
+                onClick={toggleConfetti}
+              >
+                <PartyPopper className="h-4 w-4"/>
+              </Button>
+            </div>
+            <div className="flex items-center gap-2 ml-auto">
               <Button
                 variant="outline"
                 size="sm"
                 className="flex items-center gap-2"
-                onClick={() => window.open('https://t.me/macronx', '_blank')}
+                onClick={() => window.open("https://t.me/macronx", "_blank")}
               >
                 <svg 
                   className="h-4 w-4 text-[#229ED9]" 
@@ -245,7 +286,6 @@ function App() {
               variant="ghost"
               size="sm"
               onClick={() => setDarkMode(!darkMode)}
-              className="ml-auto"
             >
               {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
@@ -365,6 +405,14 @@ function App() {
                     <div className="text-center p-4">
                       <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
                         <BookOpen className="h-6 w-6 text-primary" />
+            <Button
+              variant={confettiEnabled ? "secondary" : "ghost"}
+              size="sm"
+              onClick={toggleConfetti}
+              className="mx-auto"
+            >
+              <PartyPopper className="h-4 w-4 mr-2" />Нажми на меня
+            </Button>
                       </div>
                       <h3 className="font-semibold mb-2">Структурированные задачи</h3>
                       <p className="text-sm text-muted-foreground">
