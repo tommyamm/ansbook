@@ -88,12 +88,77 @@ const CodeComponent = ({ node, className, children, ...props }) => {
   )
 }
 
+// Компонент кнопки копирования
+const CopyButton = ({ text, className = "" }) => {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 500)
+    } catch (err) {
+      console.error('Failed to copy text: ', err)
+    }
+  }
+
+  return (
+    <button
+      onClick={handleCopy}
+      className={`copy-button ${copied ? 'copied' : ''} ${className}`}
+      title={copied ? "Скопировано!" : "Копировать код"}
+    >
+      {copied ? (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      ) : (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+      )}
+    </button>
+  )
+}
+
 // Компонент для pre блоков
-const PreComponent = ({ node, ...props }) => (
-  <div className="relative">
-    <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4 hljs" {...props} />
-  </div>
-)
+const PreComponent = ({ node, children, ...props }) => {
+  // Извлекаем текст кода из children
+  const getCodeText = (children) => {
+    if (typeof children === 'string') {
+      return children
+    }
+    if (Array.isArray(children)) {
+      return children.map(child => 
+        typeof child === 'string' ? child : 
+        child?.props?.children ? getCodeText(child.props.children) : ''
+      ).join('')
+    }
+    if (children?.props?.children) {
+      return getCodeText(children.props.children)
+    }
+    return ''
+  }
+
+  // Простая очистка текста от лишних пробелов
+  const cleanCodeText = (text) => {
+    if (!text) return ''
+    return text.trim()
+  }
+
+  const codeText = getCodeText(children)
+  const cleanedCodeText = cleanCodeText(codeText)
+  
+  return (
+    <div className="relative code-block-container">
+      <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4 hljs" {...props}>
+        {children}
+      </pre>
+      <CopyButton text={cleanedCodeText} />
+    </div>
+  )
+}
 
 // Компонент для параграфов с обработкой формул
 const ParagraphComponent = ({ node, children, ...props }) => {
