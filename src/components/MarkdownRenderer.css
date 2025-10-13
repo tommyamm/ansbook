@@ -207,14 +207,15 @@
   color: #60a5fa !important; /* голубой для заголовков функций */
 }
 
-/* Улучшенные стили для кода */
+/* Улучшенные стили для inline кода */
 .prose code:not(.hljs) {
-  background-color: rgb(var(--color-muted));
-  color: rgb(var(--color-foreground));
-  padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
-  font-size: 0.875em;
-  font-weight: 500;
+  background-color: rgba(106, 114, 128, 0.15) !important; /* Фиксированная серая подсветка */
+  color: inherit; /* Наследует цвет текста */
+  padding: 0.25rem 0.5rem; /* Увеличенная область для визуального комфорта */
+  border-radius: 0.575rem; /* Более скругленные углы */
+  /* font-size: 0.875em; */
+  /* font-weight: 500; */
+  /* transition: background-color 0.2s ease-in-out; */
 }
 
 .prose pre {
