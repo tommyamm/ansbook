@@ -208,7 +208,10 @@
 }
 
 /* Улучшенные стили для inline кода */
-.prose code:not(.hljs) {
+.prose p code:not(.hljs),
+.prose li code:not(.hljs),
+.prose strong code:not(.hljs),
+.prose em code:not(.hljs) {
   background-color: rgba(106, 114, 128, 0.15) !important; /* Фиксированная серая подсветка */
   color: inherit; /* Наследует цвет текста */
   padding: 0.25rem 0.5rem; /* Увеличенная область для визуального комфорта */
@@ -233,11 +236,12 @@
 }
 
 .prose pre code:not(.hljs) {
-  /* background: transparent; */
-  /* color: inherit; */
-  padding: 0;
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
   font-size: inherit;
   font-weight: inherit;
+  border-radius: 0 !important;
 }
 
 /* .prose pre::before {
