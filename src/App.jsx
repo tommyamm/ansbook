@@ -405,14 +405,6 @@ function App() {
                     <div className="text-center p-4">
                       <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
                         <BookOpen className="h-6 w-6 text-primary" />
-            <Button
-              variant={confettiEnabled ? "secondary" : "ghost"}
-              size="sm"
-              onClick={toggleConfetti}
-              className="mx-auto"
-            >
-              <PartyPopper className="h-4 w-4 mr-2" />Нажми на меня
-            </Button>
                       </div>
                       <h3 className="font-semibold mb-2">Структурированные задачи</h3>
                       <p className="text-sm text-muted-foreground">
