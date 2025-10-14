@@ -13,6 +13,15 @@ const tasksData = [
     ]
   },
   {
+    "type": "Тип 14",
+    "tasks": [
+      {
+        "name": "Бублик",
+        "mdFile": "type_14/bublik/bublik.md",
+      }
+    ]
+  },
+  {
     "type": "Тип 24",
     "tasks": [
       {
@@ -62,7 +71,7 @@ export const useTaskLoader = () => {
   const loadTaskContent = async (task) => {
     try {
       // Пытаемся загрузить файл из assets
-      const response = await fetch(`/ansbook/src/assets/types/${task.mdFile}`)
+      const response = await fetch(`/src/assets/types/${task.mdFile}`)
       if (response.ok) {
         return await response.text()
       } else {

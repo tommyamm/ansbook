@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import rehypeHighlight from 'rehype-highlight'
 import 'katex/dist/katex.min.css'
-import { InlineMath, BlockMath } from 'react-katex'
+import MarkdownRenderer from '@/components/MarkdownRenderer.jsx'
+// import AnimatedBackground from '@/components/AnimatedBackground.jsx'
+import ConfettiEffect from '@/components/ConfettiEffect.jsx'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
@@ -27,41 +26,12 @@ import {
   Sun,
   Moon,
   Users,
-  MessageCircle
+  MessageCircle,
+  PartyPopper
 } from 'lucide-react'
 import './App.css'
 import 'highlight.js/styles/github.css'
 
-// Функция для обработки LaTeX формул в тексте
-const processMathInText = (children) => {
-  if (typeof children === 'string') {
-    // Обрабатываем inline формулы $...$ и block формулы $$...$$
-    const parts = children.split(/(\$\$[^$]*\$\$|\$[^$]*\$)/g)
-    return parts.map((part, index) => {
-      if (part.startsWith('$$') && part.endsWith('$$')) {
-        // Block формула
-        const formula = part.slice(2, -2)
-        return <BlockMath key={index} math={formula} />
-      } else if (part.startsWith('$') && part.endsWith('$')) {
-        // Inline формула
-        const formula = part.slice(1, -1)
-        return <InlineMath key={index} math={formula} />
-      }
-      return part
-    })
-  }
-  
-  if (Array.isArray(children)) {
-    return children.map((child, index) => {
-      if (typeof child === 'string') {
-        return processMathInText(child)
-      }
-      return child
-    })
-  }
-  
-  return children
-}
 
 function App() {
   const { tasks, loading: tasksLoading, loadTaskContent } = useTaskLoader()
@@ -73,6 +43,21 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [expandedTypes, setExpandedTypes] = useState({})
+  
+  // Состояния для эффектов
+  const [confettiTrigger, setConfettiTrigger] = useState(false)
+  const [confettiEnabled, setConfettiEnabled] = useState(false)
+
+  const toggleConfetti = () => {
+    setConfettiEnabled(prev => !prev)
+    setConfettiTrigger(prev => !prev)
+  }
+
+  const onConfettiComplete = () => {
+    setConfettiTrigger(false)
+  }
+
+  const [tasksCompleted, setTasksCompleted] = useState(0)
   
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('darkMode')
@@ -120,6 +105,9 @@ function App() {
     try {
       const content = await loadTaskContent(task)
       setTaskContent(content)
+      
+      // Увеличиваем счетчик выполненных задач
+      setTasksCompleted(prev => prev + 1)
     } catch (error) {
       console.error('Ошибка загрузки задания:', error)
       setTaskContent('# Ошибка загрузки задания\n\nНе удалось загрузить содержимое задания.')
@@ -154,6 +142,17 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background flex relative">
+      {/* Анимированный фон */}
+      {/* <AnimatedBackground /> */}
+      
+      {/* Конфетти эффект */}
+      {confettiEnabled && (
+        <ConfettiEffect 
+          trigger={confettiTrigger} 
+          // onComplete={onConfettiComplete} 
+        />
+      )}
+      
       {/* Overlay для мобильных устройств */}
       {isMobile && sidebarOpen && (
         <div 
@@ -239,7 +238,7 @@ function App() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="border-b bg-card p-4">
+<header className="border-b bg-card p-4 relative">
           <div className="flex items-center gap-3">
             <Button
               variant="ghost"
@@ -257,12 +256,21 @@ function App() {
                 StasikHub
               </h1>
             </div>
-            <div className="flex items-center gap-2">
+            <div className={`absolute top-1/2 -translate-y-1/2 flex items-center transition-all duration-300 ${sidebarOpen ? 'left-[calc(40%+10rem)] -translate-x-1/2' : 'left-1/2 -translate-x-1/2'}`}>
+              <Button
+                variant={confettiEnabled ? "secondary" : "ghost"}
+                size="sm"
+                onClick={toggleConfetti}
+              >
+                <PartyPopper className="h-4 w-4"/>
+              </Button>
+            </div>
+            <div className="flex items-center gap-2 ml-auto">
               <Button
                 variant="outline"
                 size="sm"
                 className="flex items-center gap-2"
-                onClick={() => window.open('https://t.me/macronx', '_blank')}
+                onClick={() => window.open("https://t.me/macronx", "_blank")}
               >
                 <svg 
                   className="h-4 w-4 text-[#229ED9]" 
@@ -278,7 +286,6 @@ function App() {
               variant="ghost"
               size="sm"
               onClick={() => setDarkMode(!darkMode)}
-              className="ml-auto"
             >
               {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
@@ -313,79 +320,7 @@ function App() {
                 <Separator className="mt-4" />
               </CardHeader>
               <CardContent>
-                <div className="prose prose-slate dark:prose-invert max-w-none">
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    rehypePlugins={[rehypeHighlight]}
-                    components={{
-                      h3: ({node, ...props}) => <h3 className="text-xl font-bold text-primary mb-4 mt-6" {...props} />,
-                      h4: ({node, ...props}) => <h4 className="text-lg font-semibold text-foreground mb-3 mt-5" {...props} />,
-                      p: ({node, children, ...props}) => {
-                        // Обрабатываем формулы в параграфах
-                        const processedChildren = processMathInText(children)
-                        return <p className="mb-4 text-foreground leading-relaxed" {...props}>{processedChildren}</p>
-                      },
-                      code: ({node, className, children, ...props}) => {
-                        const match = /language-(\w+)/.exec(className || '')
-                        return match ? (
-                          <code className={className} {...props}>
-                            {children}
-                          </code>
-                        ) : (
-                          <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
-                            {children}
-                          </code>
-                        )
-                      },
-                      pre: ({node, ...props}) => (
-                        <div className="relative">
-                          <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4" {...props} />
-                        </div>
-                      ),
-                      img: ({node, src, alt, ...props}) => {
-                        const [imageError, setImageError] = useState(false)
-                        
-                        if (imageError) {
-                          return (
-                            <div className="flex flex-col items-center my-6 p-8 border-2 border-dashed border-muted-foreground rounded-lg">
-                              <p className="text-muted-foreground text-center">
-                                Изображение не загружено: {alt || 'изображение'}
-                              </p>
-                              <p className="text-xs text-muted-foreground mt-2">
-                                Путь: {src}
-                              </p>
-                            </div>
-                          )
-                        }
-                        
-                        return (
-                          <div className="flex flex-col items-center my-6">
-                            <img 
-                              src={src} 
-                              alt={alt} 
-                              className="max-w-full h-auto rounded-lg shadow-lg border border-border"
-                              loading="lazy"
-                              onError={() => setImageError(true)}
-                              {...props}
-                            />
-                            {/* Подпись для изображений*/}
-                            {alt && (
-                              <p className="text-sm text-muted-foreground mt-2 text-center italic max-w-md">
-                                {alt}
-                              </p>
-                            )}
-                          </div>
-                        )
-                      },
-                      strong: ({node, ...props}) => <strong className="font-semibold text-foreground" {...props} />,
-                      blockquote: ({node, ...props}) => (
-                        <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground my-4" {...props} />
-                      ),
-                    }}
-                  >
-                    {taskContent}
-                  </ReactMarkdown>
-                </div>
+                <MarkdownRenderer content={taskContent} />
                 
                 {/* Action buttons */}
                 {/* <div className="flex flex-wrap gap-3 mt-8 pt-6 border-t">
@@ -424,7 +359,7 @@ function App() {
                   </h1>
                 </div>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Добро пожаловать в StasikHub — здесь можно посмотеть шаблон решения задач из ЕГЭ по информатике.
+                  Добро пожаловать в StasikHub — здесь можно посмотреть шаблон решения задач из ЕГЭ по информатике.
                 </p>
               </div>
 
@@ -506,7 +441,7 @@ function App() {
                 <CardContent className="space-y-4">
                   <p className="text-muted-foreground">
                     Выберите интересующую вас категорию задач в боковом меню и начните просмотр. 
-                    Каждая задача содержит подробное описание а также готовое решение с объяснениями.
+                    Каждая задача содержит подробное описание, а также готовое решение с объяснениями.
                   </p>
                 </CardContent>
               </Card>
