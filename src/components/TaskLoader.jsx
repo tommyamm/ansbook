@@ -36,16 +36,20 @@ const tasksData = [
       {
         "name": "ОлегМонгол",
         "mdFile": "type_26/olegmongol/olegmongol.md",
-      }
+      },
+      {
+        "name": "Кабуня",
+        "mdFile": "type_26/kabunya/kabunya.md",
+      },
     ]
   },
   {
     "type": "Тип 27",
     "tasks": [
-      {
-        "name": "Бухляш",
-        "mdFile": "type_27/bukhlyash/bukhlyash.md",
-      },
+      // {
+      //   "name": "Бухляш",
+      //   "mdFile": "type_27/bukhlyash/bukhlyash.md",
+      // },
       {
         "name": "Бабакапа",
         "mdFile": "type_27/babacapa/babacapa.md",

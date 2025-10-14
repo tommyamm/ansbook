@@ -28,16 +28,18 @@ export const useMarkdownValidation = (content) => {
       return { isValid: false, error: 'Контент отсутствует или имеет неверный формат' }
     }
 
-    // Проверяем на потенциально проблемные паттерны
+    // Удаляем кодовые блоки перед проверкой
+    const contentWithoutCodeBlocks = content.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '')
+
     const problematicPatterns = [
       /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
       /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
       /javascript:/gi,
-      /on\w+\s*=/gi
+      /\s+on[a-zA-Z]+\s*=/gi
     ]
 
     for (const pattern of problematicPatterns) {
-      if (pattern.test(content)) {
+      if (pattern.test(contentWithoutCodeBlocks)) {
         return { 
           isValid: false, 
           error: 'Обнаружен потенциально опасный контент' 
