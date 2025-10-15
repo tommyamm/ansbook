@@ -21,7 +21,7 @@ const ParticleEffect = ({ trigger }) => {
         background: {
             color: { value: 'transparent' },
         },
-        fpsLimit: 60,
+        fpsLimit: 120,
         interactivity: {
             events: {
             onClick: {
@@ -34,15 +34,15 @@ const ParticleEffect = ({ trigger }) => {
             },
             resize: true,
             },
-            modes: {
-            push: {
-                quantity: 4,
-            },
-            repulse: {
-                distance: 100,
-                duration: 0.4,
-            },
-            },
+            // modes: {
+            // push: {
+            //     quantity: 4,
+            // },
+            // repulse: {
+            //     distance: 100,
+            //     duration: 0.4,
+            // },
+            // },
         },
         particles: {
             color: {
@@ -56,13 +56,13 @@ const ParticleEffect = ({ trigger }) => {
             width: 1,
             },
             move: {
-            direction: 'top',
+            // direction: 'top',
             enable: true,
             outModes: {
-                default: 'destroy',
+                default: 'bounce',
             },
             random: true,
-            speed: 3,
+            speed: 5,
             straight: false,
             },
             number: {
@@ -70,19 +70,19 @@ const ParticleEffect = ({ trigger }) => {
                 enable: true,
                 area: 1000,
             },
-            value: 60,
+            value: 20,
             },
             opacity: {
             value: 0.9,
             },
             shape: {
-            type: ['circle', 'square'],
+            type: ['circle', 'square', 'triangle', 'polygon'],
             },
             size: {
             value: { min: 2, max: 8 },
             },
         },
-        detectRetina: true,
+        detectRetina: false,
         });
         
         // Принудительно запускаем анимацию после небольшой задержки
@@ -91,7 +91,7 @@ const ParticleEffect = ({ trigger }) => {
           if (container && container.particles) {
             container.particles.play();
           }
-        }, 100);
+        }, 1000);
     } else {
         setOptions(null);
     }
