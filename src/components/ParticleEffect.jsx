@@ -62,7 +62,7 @@ const ParticleEffect = ({ trigger }) => {
                 default: 'bounce',
             },
             random: true,
-            speed: 5,
+            speed: 3,
             straight: false,
             },
             number: {
@@ -79,7 +79,7 @@ const ParticleEffect = ({ trigger }) => {
             type: ['circle', 'square', 'triangle', 'polygon'],
             },
             size: {
-            value: { min: 2, max: 8 },
+            value: { min: 2, max: 7 },
             },
         },
         detectRetina: true,
