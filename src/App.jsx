@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import 'katex/dist/katex.min.css'
 import MarkdownRenderer from '@/components/MarkdownRenderer.jsx'
 // import AnimatedBackground from '@/components/AnimatedBackground.jsx'
-import ConfettiEffect from '@/components/ConfettiEffect.jsx'
+import ParticleEffect from '@/components/ParticleEffect.jsx'
+// import ConfettiEffect from '@/components/ConfettiEffect.jsx'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
@@ -27,7 +28,7 @@ import {
   Moon,
   Users,
   MessageCircle,
-  PartyPopper
+  Sparkles
 } from 'lucide-react'
 import './App.css'
 import 'highlight.js/styles/github.css'
@@ -45,17 +46,20 @@ function App() {
   const [expandedTypes, setExpandedTypes] = useState({})
   
   // Состояния для эффектов
-  const [confettiTrigger, setConfettiTrigger] = useState(false)
-  const [confettiEnabled, setConfettiEnabled] = useState(false)
+  const [particleEnabled, setParticleEnabled] = useState(false)
+  // const [confettiEnabled, setConfettiEnabled] = useState(false)
 
-  const toggleConfetti = () => {
-    setConfettiEnabled(prev => !prev)
-    setConfettiTrigger(prev => !prev)
+  const toggleParticleEffect = () => {
+    setParticleEnabled(prev => !prev)
   }
 
-  const onConfettiComplete = () => {
-    setConfettiTrigger(false)
-  }
+  // const triggerConfetti = () => {
+  //   setConfettiEnabled(true)
+  //   // Автоматически отключаем конфетти через 3 секунды
+  //   setTimeout(() => {
+  //     setConfettiEnabled(false)
+  //   }, 3000)
+  // }
 
   const [tasksCompleted, setTasksCompleted] = useState(0)
   
@@ -145,13 +149,20 @@ function App() {
       {/* Анимированный фон */}
       {/* <AnimatedBackground /> */}
       
-      {/* Конфетти эффект */}
-      {confettiEnabled && (
-        <ConfettiEffect 
-          trigger={confettiTrigger} 
-          // onComplete={onConfettiComplete} 
+      {/* Particle эффект */}
+      {particleEnabled && (
+        <ParticleEffect 
+          trigger={particleEnabled}
         />
       )}
+      
+      {/* Конфетти эффект */}
+      {/* {confettiEnabled && (
+        <ConfettiEffect 
+          trigger={confettiEnabled}
+          onComplete={() => setConfettiEnabled(false)}
+        />
+      )} */}
       
       {/* Overlay для мобильных устройств */}
       {isMobile && sidebarOpen && (
@@ -256,14 +267,23 @@ function App() {
                 StasikHub
               </h1>
             </div>
-            <div className={`absolute top-1/2 -translate-y-1/2 flex items-center transition-all duration-300 ${sidebarOpen ? 'left-[calc(40%+10rem)] -translate-x-1/2' : 'left-1/2 -translate-x-1/2'}`}>
+            <div className={`absolute top-1/2 -translate-y-1/2 flex items-center gap-2 transition-all duration-300 ${sidebarOpen ? 'left-[calc(40%+10rem)] -translate-x-1/2' : 'left-1/2 -translate-x-1/2'}`}>
               <Button
-                variant={confettiEnabled ? "secondary" : "ghost"}
+                variant={particleEnabled ? "secondary" : "ghost"}
                 size="sm"
-                onClick={toggleConfetti}
+                onClick={toggleParticleEffect}
+                title="Переключить частицы"
               >
-                <PartyPopper className="h-4 w-4"/>
+                <Sparkles className="h-4 w-4"/>
               </Button>
+              {/* <Button
+                variant="ghost"
+                size="sm"
+                onClick={triggerConfetti}
+                title="Запустить конфетти"
+              >
+                🎉
+              </Button> */}
             </div>
             <div className="flex items-center gap-2 ml-auto">
               <Button
