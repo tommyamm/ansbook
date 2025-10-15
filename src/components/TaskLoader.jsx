@@ -25,8 +25,8 @@ const tasksData = [
     "type": "Тип 24",
     "tasks": [
       {
-        "name": "Тибидок",
-        "mdFile": "type_24/tibidok/tibidok.md",
+        "name": "Тибидох",
+        "mdFile": "type_24/tibidokh/tibidokh.md",
       }
     ]
   },
