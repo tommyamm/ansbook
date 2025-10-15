@@ -15,7 +15,11 @@ export default defineConfig({
         {
           src: 'src/assets/types',
           dest: 'src/assets'
-        }
+        },
+        {
+          src: 'yandex_27e6aa29f9924da5.html',  // ← добавь это
+          dest: '.'                              // ← копирует в корень dist/
+        },
       ]
     })
   ],

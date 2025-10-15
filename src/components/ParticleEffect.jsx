@@ -21,7 +21,7 @@ const ParticleEffect = ({ trigger }) => {
         background: {
             color: { value: 'transparent' },
         },
-        fpsLimit: 120,
+        fpsLimit: 60,
         interactivity: {
             events: {
             onClick: {
@@ -82,7 +82,7 @@ const ParticleEffect = ({ trigger }) => {
             value: { min: 2, max: 8 },
             },
         },
-        detectRetina: false,
+        detectRetina: true,
         });
         
         // Принудительно запускаем анимацию после небольшой задержки
@@ -105,9 +105,9 @@ const ParticleEffect = ({ trigger }) => {
       init={particlesInit}
       loaded={particlesLoaded}
       options={options}
-      className="fixed inset-0 pointer-events-none z-50"
+      className="fixed inset-0 pointer-events-none z-50" style={{ position: 'fixed' }}
     />
   );
 };
 
-export default ParticleEffect;
+export default ParticleEffect
