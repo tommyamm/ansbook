@@ -50,15 +50,15 @@ const ParticleEffect = ({ trigger }) => {
         
         interactivity: {
           events: {
-            onClick: {
-              enable: true,
-              mode: 'push',
-            },
-            onHover: {
-              enable: true,
-              mode: 'repulse',
-            },
-            resize: false,
+            // onClick: {
+            //   enable: true,
+            //   mode: 'push',
+            // },
+            // onHover: {
+            //   enable: true,
+            //   mode: 'repulse',
+            // },
+            // resize: false,
           },
           modes: {
             push: {
@@ -83,7 +83,7 @@ const ParticleEffect = ({ trigger }) => {
               default: 'bounce',
             },
             random: true,
-            speed: isMobile ? 2 : 3,
+            speed: isMobile ? 1.2 : 1.2,
             straight: false,
             direction: 'none',
             attract: {
@@ -117,15 +117,15 @@ const ParticleEffect = ({ trigger }) => {
         interactivity: {
           detectsOn: 'window', // Слушаем события на всём окне
           events: {
-            onClick: {
-              enable: true,
-              mode: 'push',
-            },
-            onHover: {
-              enable: true,
-              mode: 'repulse',
-            },
-            resize: false,
+            // onClick: {
+            //   enable: true,
+            //   mode: 'push',
+            // },
+            // onHover: {
+            //   enable: true,
+            //   mode: 'repulse',
+            // },
+            // resize: false,
           },
           modes: {
             push: {
