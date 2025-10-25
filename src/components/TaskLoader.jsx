@@ -12,6 +12,15 @@ const tasksData = [
       },
     ]
   },
+    {
+    "type": "Тип 5",
+    "tasks": [
+       {
+        "name": "ИришкаЧП",
+        "mdFile": "type_5/irishka/irishka.md",
+      },
+    ]
+  },
   {
     "type": "Тип 14",
     "tasks": [
