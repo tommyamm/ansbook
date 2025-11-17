@@ -30,6 +30,15 @@ const tasksData = [
       }
     ]
   },
+   {
+    "type": "Тип 23",
+    "tasks": [
+      {
+        "name": "Абобус",
+        "mdFile": "type_23/abobus/abobus.md",
+      }
+    ]
+  },
   {
     "type": "Тип 24",
     "tasks": [
@@ -65,6 +74,19 @@ const tasksData = [
       },
     ]
   },
+  // {
+  //   "type": "Кто покушать??",
+  //   "tasks": [
+  //     // {
+  //     //   "name": "Бухляш",
+  //     //   "mdFile": "type_27/bukhlyash/bukhlyash.md",
+  //     // },
+  //     {
+  //       "name": "Абобус",
+  //       "mdFile": "test/test.md",
+  //     },
+  //   ]
+  // },
 ]
 
 export const useTaskLoader = () => {

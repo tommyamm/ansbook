@@ -138,3 +138,6 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
+
+# My custom files that should not be included in the prod
+src/components/AnimatedBackground.jsx
