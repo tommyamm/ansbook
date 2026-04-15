@@ -72,6 +72,10 @@ const tasksData = [
         "name": "Бабакапа",
         "mdFile": "type_27/babacapa/babacapa.md",
       },
+      {
+        "name": "Хасбик",
+        "mdFile": "type_27/hasbik/hasbik.md",
+      },
     ]
   },
   // {

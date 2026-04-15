@@ -83,7 +83,7 @@ const ParticleEffect = ({ trigger }) => {
               default: 'bounce',
             },
             random: true,
-            speed: isMobile ? 1.2 : 1.2,
+            speed: isMobile ? 0.9 : 0.9,
             straight: false,
             direction: 'none',
             attract: {

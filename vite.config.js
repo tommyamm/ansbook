@@ -1,11 +1,9 @@
-// vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import path from 'path'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react( ),
@@ -17,13 +15,13 @@ export default defineConfig({
           dest: 'src/assets'
         },
         {
-          src: 'yandex_27e6aa29f9924da5.html',  // ← добавь это
-          dest: '.'                              // ← копирует в корень dist/
+          src: 'yandex_27e6aa29f9924da5.html', 
+          dest: '.'
         },
       ]
     })
   ],
-  base: '/', // ИЗМЕНИТЕ ЭТУ СТРОКУ НА '/'
+  base: '/',
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
