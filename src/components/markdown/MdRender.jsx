@@ -2,15 +2,43 @@ import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
-
-import { processMathInText } from '@/lib/utils.js'
+import { InlineMath, BlockMath } from 'react-katex'
 
 import { 
     useMdRender, 
     useMdValidation } 
 from '@/hooks/useMdRender.js'
 
-// import './MdRender.css' // CSS moved to index.css
+// Функция для обработки LaTeX формул в тексте
+const processMathInText = (children) => {
+    if (typeof children === 'string') {
+        // Обрабатываем inline формулы $...$ и block формулы $$...$$
+        const parts = children.split(/(\$\$[^$]*\$\$|\$[^$]*\$)/g)
+        return parts.map((part, index) => {
+            if (part.startsWith('$$') && part.endsWith('$$')) {
+                // Block формула
+                const formula = part.slice(2, -2)
+                return <BlockMath key={index} math={formula} />
+            } else if (part.startsWith('$') && part.endsWith('$')) {
+                // Inline формула
+                const formula = part.slice(1, -1)
+                return <InlineMath key={index} math={formula} />
+            }
+            return part
+        })
+    }
+
+    if (Array.isArray(children)) {
+        return children.map((child, index) => {
+            if (typeof child === 'string') {
+                return processMathInText(child)
+            }
+            return child
+        })
+    }
+
+    return children
+}
 
 // Компонент для обработки изображений с обработкой ошибок
 const ImageComponent = ({ src, alt, ...props }) => {

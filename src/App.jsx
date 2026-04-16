@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import 'katex/dist/katex.min.css'
 import ParticleEffect from '@/components/common/ParticleEffect.jsx'
-import { useTaskLoader } from '@/hooks/useTaskLoader.js'
+import { useTasks } from '@/hooks/useTaskLoader.js'
 import { useIsMobile } from '@/hooks/useMobile.js'
 import './index.css'
 import 'highlight.js/styles/github.css'
@@ -15,7 +15,7 @@ import HomePage from '@/pages/HomePage.jsx'
 import TaskView from '@/pages/TaskView.jsx'
 
 function App() {
-    const { tasks, loading: tasksLoading, loadTaskContent } = useTaskLoader()
+    const { tasks, loading: tasksLoading, loadTaskContent } = useTasks()
     const isMobile = useIsMobile()
     const [currentTask, setCurrentTask] = useState(null)
     const [taskContent, setTaskContent] = useState('')

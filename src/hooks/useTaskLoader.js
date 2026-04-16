@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { tasksData } from './tasks.config.js'
+import { tasksData } from '../../taskConfig.js'
 
 export const useTasks = () => {
     const [tasks, setTasks] = useState([])
@@ -17,7 +17,7 @@ export const useTasks = () => {
 
     const loadTaskContent = async (task) => {
         try {
-            const response = await fetch(`/src/assets/types/${task.mdFile}`)
+            const response = await fetch(task.mdFile)
             if (response.ok) {
                 return await response.text()
             }
