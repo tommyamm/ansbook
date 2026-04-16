@@ -2,7 +2,11 @@ import { useRef, useEffect } from 'react'
 import { Input } from '@/components/ui/Input.jsx'
 import { Button } from '@/components/ui/Button.jsx'
 import { Badge } from '@/components/ui/Badge.jsx'
-import { Search, X, ChevronDown, ChevronRight, FileText, ChevronsUpDown, ChevronsDownUp } from 'lucide-react'
+import { AnimatedCollapse } from '@/components/common/AnimateCollapse.jsx'
+import { 
+    Search, X, ChevronDown, 
+    FileText, ChevronsUpDown, ChevronsDownUp } 
+from 'lucide-react'
 
 const Sidebar = ({
     isOpen,
@@ -135,14 +139,14 @@ const Sidebar = ({
                                                 <Badge variant="outline" className="text-xs px-1.5 py-0 h-5 font-normal">
                                                     {type.tasks.length}
                                                 </Badge>
-                                                {isExpanded
-                                                    ? <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-                                                    : <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-                                                }
+                                                <ChevronDown
+                                                    className="h-3.5 w-3.5 text-muted-foreground transition-transform duration-250"
+                                                    style={{ transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)' }}
+                                                />
                                             </div>
                                         </Button>
 
-                                        {isExpanded && (
+                                        <AnimatedCollapse isOpen={isExpanded}>
                                             <div className="ml-3 pl-3 border-l border-border space-y-0.5 my-1">
                                                 {type.tasks.map((task, taskIndex) => {
                                                     const isActive = task.name === activeTaskName
@@ -160,7 +164,7 @@ const Sidebar = ({
                                                     )
                                                 })}
                                             </div>
-                                        )}
+                                        </AnimatedCollapse>
                                     </div>
                                 )
                             })}
