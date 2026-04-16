@@ -54,28 +54,28 @@ const ParticleEffect = ({ trigger }) => {
                 fpsLimit: isMobile ? 30 : 60,
                 smooth: true,
 
-                interactivity: {
-                    events: {
-                        // onClick: {
-                        //   enable: true,
-                        //   mode: 'push',
-                        // },
-                        // onHover: {
-                        //   enable: true,
-                        //   mode: 'repulse',
-                        // },
-                        // resize: false,
-                    },
-                    modes: {
-                        push: {
-                            quantity: 4,
-                        },
-                        repulse: {
-                            distance: 100,
-                            duration: 0.4,
-                        },
-                    },
-                },
+                // interactivity: {
+                //     events: {
+                //         // onClick: {
+                //         //   enable: true,
+                //         //   mode: 'push',
+                //         // },
+                //         // onHover: {
+                //         //   enable: true,
+                //         //   mode: 'repulse',
+                //         // },
+                //         // resize: false,
+                //     },
+                //     modes: {
+                //         push: {
+                //             quantity: 4,
+                //         },
+                //         repulse: {
+                //             distance: 100,
+                //             duration: 0.4,
+                //         },
+                //     },
+                // },
                 particles: {
                     color: {
                         value: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#ffa726', '#26c6da', '#ab47bc'],
@@ -123,24 +123,24 @@ const ParticleEffect = ({ trigger }) => {
                 interactivity: {
                     detectsOn: 'window', // Слушаем события на всём окне
                     events: {
-                        // onClick: {
-                        //   enable: true,
-                        //   mode: 'push',
-                        // },
+                        onClick: {
+                          enable: true,
+                          mode: 'push',
+                        },
                         // onHover: {
                         //   enable: true,
                         //   mode: 'repulse',
                         // },
-                        // resize: false,
+                        resize: false,
                     },
                     modes: {
                         push: {
                             quantity: 4,
                         },
-                        repulse: {
-                            distance: 100,
-                            duration: 0.4,
-                        },
+                        // repulse: {
+                        //     distance: 100,
+                        //     // duration: 1,
+                        // },
                     },
                 },
             });

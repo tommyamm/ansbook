@@ -1,18 +1,20 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Button } from '@/components/ui/button.jsx'
 import { BookOpen, Code, Users, MessageCircle } from 'lucide-react'
 
-const HomePage = ({ onSetCurrentTask }) => {
+const HomePage = () => {
+    const navigate = useNavigate()
+
     return (
         <div className="max-w-4xl mx-auto p-6 space-y-8">
-            {/* Hero Section */}
             <div className="text-center space-y-4">
                 <div className="flex items-center justify-center gap-3 mb-6">
                     <BookOpen className="h-12 w-12 text-primary" />
                     <h1
                         className="text-4xl font-bold text-foreground cursor-pointer hover:text-primary transition-colors"
-                        onClick={() => onSetCurrentTask(null)}
+                        onClick={() => navigate('/')}
                     >
                         StasikHub
                     </h1>
@@ -22,7 +24,6 @@ const HomePage = ({ onSetCurrentTask }) => {
                 </p>
             </div>
 
-            {/* About Section */}
             <div className="grid md:grid-cols-2 gap-6">
                 <Card className="card-hover">
                     <CardHeader>
@@ -33,7 +34,7 @@ const HomePage = ({ onSetCurrentTask }) => {
                     </CardHeader>
                     <CardContent>
                         <p className="text-muted-foreground leading-relaxed">
-                            StasikHub — это платформа, созданная для помощи в подготовке к ЕГЭ по информатике.
+                            StasikHub — небольшой сайтик, созданный для помощи в подготовке к ЕГЭ по информатике.
                             Здесь вы найдете задачи, сгруппированные по типам, с решениями на Python.
                         </p>
                     </CardContent>
@@ -43,18 +44,18 @@ const HomePage = ({ onSetCurrentTask }) => {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Users className="h-5 w-5 text-primary" />
-                            Цели проекта
+                            Зачем оно надо
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <p className="text-muted-foreground leading-relaxed">
-                            Моя цель — сохранить и систематизировать решения, чтобы у вас всегда был доступ к ним.
+                            Например, в школе или дома вы решили освежить знания, но подзабыли способ решения - этот сайт 
+                            поможет вам :)
                         </p>
                     </CardContent>
                 </Card>
             </div>
 
-            {/* Features */}
             <Card className="card-hover">
                 <CardHeader>
                     <CardTitle>Возможности платформы</CardTitle>
@@ -85,27 +86,13 @@ const HomePage = ({ onSetCurrentTask }) => {
                             </div>
                             <h3 className="font-semibold mb-2">Поддержка</h3>
                             <p className="text-sm text-muted-foreground">
-                                Быстрая помощь и обратная связь через Telegram
+                                Помощь и обратная связь через Telegram
                             </p>
                         </div>
                     </div>
                 </CardContent>
             </Card>
 
-            {/* Getting Started */}
-            <Card className="card-hover">
-                <CardHeader>
-                    <CardTitle>Как начать?</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <p className="text-muted-foreground">
-                        Выберите интересующую вас категорию задач в боковом меню и начните просмотр.
-                        Каждая задача содержит подробное описание, а также готовое решение с объяснениями.
-                    </p>
-                </CardContent>
-            </Card>
-
-            {/* Support Section */}
             <Card className="card-hover">
                 <CardHeader>
                     <CardTitle>Нужна помощь?</CardTitle>
@@ -113,7 +100,7 @@ const HomePage = ({ onSetCurrentTask }) => {
                 <CardContent className="space-y-4">
                     <p className="text-muted-foreground">
                         Если у вас возникли вопросы, вы нашли ошибку или хотите предложить улучшение,
-                        не стесняйтесь обращаться в Telegram. Я всегда рад помочь!
+                        не стесняйтесь обращаться в Telegram. Постараюсь помочь. Отвечу в течение дня.
                     </p>
                     <div className="flex flex-wrap gap-3">
                         <Button

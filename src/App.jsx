@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Routes, Route, useNavigate, useParams, useLocation } from 'react-router-dom'
 import 'katex/dist/katex.min.css'
 import ParticleEffect from '@/components/common/ParticleEffect.jsx'
 import { useTasks } from '@/hooks/useTaskLoader.js'
@@ -6,30 +7,78 @@ import { useIsMobile } from '@/hooks/useMobile.js'
 import './index.css'
 import 'highlight.js/styles/github.css'
 
-// Layout компоненты
 import Header from '@/components/layout/Header.jsx'
 import Sidebar from '@/components/layout/Sidebar.jsx'
-
-// Страницы
 import HomePage from '@/pages/HomePage.jsx'
 import TaskView from '@/pages/TaskView.jsx'
+
+// Обёртка для TaskView — читает :taskName из URL
+function TaskPage({ tasks, loadTaskContent }) {
+    const { taskName } = useParams()
+    const navigate = useNavigate()
+    const [taskContent, setTaskContent] = useState('')
+    const [loading, setLoading] = useState(true)
+
+    // Ищем задание по имени (URL-encoded)
+    const decodedName = decodeURIComponent(taskName)
+    const currentTask = tasks.flatMap(t => t.tasks).find(t => t.name === decodedName)
+
+    useEffect(() => {
+        if (!currentTask) return
+        setLoading(true)
+        loadTaskContent(currentTask)
+            .then(content => setTaskContent(content))
+            .catch(() => setTaskContent('# Ошибка загрузки задания'))
+            .finally(() => setLoading(false))
+    }, [currentTask?.name])
+
+    if (!currentTask) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                    <p className="text-muted-foreground">Задание не найдено</p>
+                    <button className="mt-4 text-primary underline" onClick={() => navigate('/')}>
+                        На главную
+                    </button>
+                </div>
+            </div>
+        )
+    }
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-muted-foreground">Загрузка задания...</p>
+                </div>
+            </div>
+        )
+    }
+
+    return <TaskView currentTask={currentTask} taskContent={taskContent} tasks={tasks} />
+}
 
 function App() {
     const { tasks, loading: tasksLoading, loadTaskContent } = useTasks()
     const isMobile = useIsMobile()
-    const [currentTask, setCurrentTask] = useState(null)
-    const [taskContent, setTaskContent] = useState('')
-    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
+    const location = useLocation()
+
     const [searchTerm, setSearchTerm] = useState('')
     const [sidebarOpen, setSidebarOpen] = useState(false)
-    const [expandedTypes, setExpandedTypes] = useState({})
 
-    // Состояния для эффектов
+    // Сохраняем раскрытые категории в localStorage
+    const [expandedTypes, setExpandedTypes] = useState(() => {
+        try {
+            const saved = localStorage.getItem('expandedTypes')
+            return saved ? JSON.parse(saved) : {}
+        } catch {
+            return {}
+        }
+    })
+
     const [particleEnabled, setParticleEnabled] = useState(false)
-
-    const toggleParticleEffect = () => {
-        setParticleEnabled(prev => !prev)
-    }
 
     const [darkMode, setDarkMode] = useState(() => {
         const saved = localStorage.getItem('darkMode')
@@ -37,44 +86,53 @@ function App() {
         return window.matchMedia('(prefers-color-scheme: dark)').matches
     })
 
+    const handleExpandAll = () => {
+        const allTypes = tasks.reduce((acc, type) => ({ ...acc, [type.type]: true }), {})
+        setExpandedTypes(allTypes)
+    }
+
+    const handleCollapseAll = () => {
+        setExpandedTypes({})
+    }
     useEffect(() => {
         localStorage.setItem('darkMode', JSON.stringify(darkMode))
-        if (darkMode) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
+        document.documentElement.classList.toggle('dark', darkMode)
     }, [darkMode])
 
     useEffect(() => {
         setSidebarOpen(!isMobile)
     }, [isMobile])
 
-    const loadTask = async (task) => {
-        setCurrentTask(task)
-        setLoading(true)
+    useEffect(() => {
+        localStorage.setItem('expandedTypes', JSON.stringify(expandedTypes))
+    }, [expandedTypes])
 
-        // Закрываем sidebar на мобильных устройствах при выборе задания
-        if (isMobile) {
-            setSidebarOpen(false)
-        }
+    // При поиске — автоматически раскрываем группы с результатами
+    useEffect(() => {
+        if (!searchTerm) return
+        const newExpanded = {}
+        tasks.forEach(type => {
+            const hasMatch = type.tasks.some(t =>
+                t.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            if (hasMatch) newExpanded[type.type] = true
+        })
+        setExpandedTypes(prev => ({ ...prev, ...newExpanded }))
+    }, [searchTerm, tasks])
 
-        try {
-            const content = await loadTaskContent(task)
-            setTaskContent(content)
-        } catch (error) {
-            console.error('Ошибка загрузки задания:', error)
-            setTaskContent('# Ошибка загрузки задания\n\nНе удалось загрузить содержимое задания.')
-        }
-        setLoading(false)
+    const selectTask = (task) => {
+        if (isMobile) setSidebarOpen(false)
+        navigate(`/task/${encodeURIComponent(task.name)}`)
     }
 
     const toggleTypeExpansion = (typeTitle) => {
-        setExpandedTypes(prev => ({
-            ...prev,
-            [typeTitle]: !prev[typeTitle]
-        }))
+        setExpandedTypes(prev => ({ ...prev, [typeTitle]: !prev[typeTitle] }))
     }
+
+    // Определяем активное задание по URL для подсветки в sidebar
+    const activeTaskName = location.pathname.startsWith('/task/')
+        ? decodeURIComponent(location.pathname.replace('/task/', ''))
+        : null
 
     if (tasksLoading) {
         return (
@@ -89,14 +147,8 @@ function App() {
 
     return (
         <div className="min-h-screen bg-background flex relative">
-            {/* Particle эффект */}
-            {particleEnabled && (
-                <ParticleEffect
-                    trigger={particleEnabled}
-                />
-            )}
+            {particleEnabled && <ParticleEffect trigger={particleEnabled} />}
 
-            {/* Overlay для мобильных устройств */}
             {isMobile && sidebarOpen && (
                 <div
                     className="fixed inset-0 bg-black/50 z-40 md:hidden"
@@ -104,51 +156,45 @@ function App() {
                 />
             )}
 
-            {/* Sidebar */}
             <Sidebar 
                 isOpen={sidebarOpen}
                 isMobile={isMobile}
                 tasks={tasks}
-                currentTask={currentTask}
+                activeTaskName={activeTaskName}
                 searchTerm={searchTerm}
                 expandedTypes={expandedTypes}
                 onClose={() => setSidebarOpen(false)}
                 onSearchChange={setSearchTerm}
                 onToggleType={toggleTypeExpansion}
-                onSelectTask={loadTask}
+                onSelectTask={selectTask}
+                onExpandAll={handleExpandAll}
+                onCollapseAll={handleCollapseAll}
             />
 
-            {/* Main Content */}
             <div className="flex-1 flex flex-col">
-                {/* Header */}
-                <Header 
+                <Header
                     sidebarOpen={sidebarOpen}
                     darkMode={darkMode}
                     particleEnabled={particleEnabled}
                     onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
                     onToggleDarkMode={() => setDarkMode(!darkMode)}
-                    onToggleParticles={toggleParticleEffect}
-                    onLogoClick={() => setCurrentTask(null)}
+                    onToggleParticles={() => setParticleEnabled(p => !p)}
+                    onLogoClick={() => navigate('/')}
                 />
 
-                {/* Content Area */}
                 <main className="flex-1 p-6 overflow-auto">
-                    {loading ? (
-                        <div className="flex items-center justify-center h-full">
-                            <div className="text-center">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                                <p className="text-muted-foreground">Загрузка задания...</p>
-                            </div>
-                        </div>
-                    ) : currentTask ? (
-                        <TaskView 
-                            currentTask={currentTask} 
-                            taskContent={taskContent} 
-                            tasks={tasks} 
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route
+                            path="/task/:taskName"
+                            element={
+                                <TaskPage
+                                    tasks={tasks}
+                                    loadTaskContent={loadTaskContent}
+                                />
+                            }
                         />
-                    ) : (
-                        <HomePage onSetCurrentTask={setCurrentTask} />
-                    )}
+                    </Routes>
                 </main>
             </div>
         </div>

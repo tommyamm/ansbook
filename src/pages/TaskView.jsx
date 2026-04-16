@@ -8,7 +8,9 @@ import MarkdownRenderer from '@/components/markdown/MdRender.jsx'
 const TaskView = ({ currentTask, taskContent, tasks }) => {
     if (!currentTask) return null
 
-    const taskType = tasks.find(type => type.tasks.some(task => task.name === currentTask.name))?.type
+    const taskType = tasks.find(type =>
+        type.tasks.some(task => task.name === currentTask.name)
+    )?.type
 
     return (
         <Card className="max-w-4xl mx-auto card-hover">
