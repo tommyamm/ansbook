@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
-import { Input } from '@/components/ui/input.jsx'
-import { Button } from '@/components/ui/button.jsx'
-import { Badge } from '@/components/ui/badge.jsx'
+import { Input } from '@/components/ui/Input.jsx'
+import { Button } from '@/components/ui/Button.jsx'
+import { Badge } from '@/components/ui/Badge.jsx'
 import { Search, X, ChevronDown, ChevronRight, FileText, ChevronsUpDown, ChevronsDownUp } from 'lucide-react'
 
 const Sidebar = ({

@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { Alert, AlertDescription } from '@/components/ui/alert.jsx'
+import { Alert, AlertDescription } from '@/components/ui/Alert.jsx'
 import { AlertTriangle } from 'lucide-react'
 
 class MarkdownErrorBoundary extends Component {

@@ -1,7 +1,7 @@
 import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
-import { Badge } from '@/components/ui/badge.jsx'
-import { Separator } from '@/components/ui/separator.jsx'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card.jsx'
+import { Badge } from '@/components/ui/Badge.jsx'
+import { Separator } from '@/components/ui/Separator.jsx'
 import { Code, FileText } from 'lucide-react'
 import MarkdownRenderer from '@/components/markdown/MdRender.jsx'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
-import { Button } from '@/components/ui/button.jsx'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card.jsx'
+import { Button } from '@/components/ui/Button.jsx'
 import { BookOpen, Code, Users, MessageCircle } from 'lucide-react'
 
 const HomePage = () => {

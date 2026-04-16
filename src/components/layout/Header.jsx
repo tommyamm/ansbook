@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button.jsx'
+import { Button } from '@/components/ui/Button.jsx'
 import { BookOpen, Menu, Sun, Moon, Sparkles } from 'lucide-react'
 
 const TelegramIcon = () => (
