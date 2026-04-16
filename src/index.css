@@ -89,19 +89,19 @@
 }
 
 .dark {
-    --background: oklch(14% 0.004 250);          /* холодный тёмно-серый */
+    --background: oklch(13.945% 0.00484 262.837 / 0.821);          /* холодный тёмно-серый */
     --foreground: oklch(92% 0.004 260);           /* светло-серый, не белый */
-    --card: oklch(19% 0.005 255);
+    --card: oklch(25.53% 0.00639 258.425);
     --card-foreground: oklch(92% 0.004 260);
     --popover: oklch(19% 0.005 255);
     --popover-foreground: oklch(92% 0.004 260);
     --primary: oklch(87% 0.005 260);              /* чистый светло-серый */
     --primary-foreground: oklch(19% 0.005 255);
-    --secondary: oklch(25% 0.005 255);
+    --secondary: oklch(38.536% 0.02156 248.437 / 0.771);
     --secondary-foreground: oklch(92% 0.004 260);
     --muted: oklch(25% 0.005 255);
     --muted-foreground: oklch(60% 0.006 258);     /* средний серый, чуть голубоватый */
-    --accent: oklch(25% 0.005 255);
+    --accent: oklch(43.893% 0.06002 248.551);
     --accent-foreground: oklch(92% 0.004 260);
     --destructive: oklch(0.704 0.191 22.216);
     --border: oklch(1 0 0 / 10%);
