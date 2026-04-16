@@ -12,16 +12,15 @@ import Sidebar from '@/components/layout/Sidebar.jsx'
 import HomePage from '@/pages/HomePage.jsx'
 import TaskView from '@/pages/TaskView.jsx'
 
-// Обёртка для TaskView — читает :taskName из URL
+// Обёртка для TaskView — читает :taskSlug из URL
 function TaskPage({ tasks, loadTaskContent }) {
-    const { taskName } = useParams()
+    const { taskSlug } = useParams()
     const navigate = useNavigate()
     const [taskContent, setTaskContent] = useState('')
     const [loading, setLoading] = useState(true)
 
-    // Ищем задание по имени (URL-encoded)
-    const decodedName = decodeURIComponent(taskName)
-    const currentTask = tasks.flatMap(t => t.tasks).find(t => t.name === decodedName)
+    // Ищем задание по slug
+    const currentTask = tasks.flatMap(t => t.tasks).find(t => t.slug === taskSlug)
 
     useEffect(() => {
         if (!currentTask) return
@@ -122,16 +121,16 @@ function App() {
 
     const selectTask = (task) => {
         if (isMobile) setSidebarOpen(false)
-        navigate(`/task/${encodeURIComponent(task.name)}`)
+        navigate(`/task/${task.slug}`)
     }
 
     const toggleTypeExpansion = (typeTitle) => {
         setExpandedTypes(prev => ({ ...prev, [typeTitle]: !prev[typeTitle] }))
     }
 
-    // Определяем активное задание по URL для подсветки в sidebar
-    const activeTaskName = location.pathname.startsWith('/task/')
-        ? decodeURIComponent(location.pathname.replace('/task/', ''))
+    // Определяем активное задание по URL (по slug) для подсветки в sidebar
+    const activeTaskSlug = location.pathname.startsWith('/task/')
+        ? location.pathname.replace('/task/', '')
         : null
 
     if (tasksLoading) {
@@ -156,11 +155,11 @@ function App() {
                 />
             )}
 
-            <Sidebar 
+            <Sidebar
                 isOpen={sidebarOpen}
                 isMobile={isMobile}
                 tasks={tasks}
-                activeTaskName={activeTaskName}
+                activeTaskSlug={activeTaskSlug}
                 searchTerm={searchTerm}
                 expandedTypes={expandedTypes}
                 onClose={() => setSidebarOpen(false)}
@@ -186,7 +185,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route
-                            path="/task/:taskName"
+                            path="/task/:taskSlug"
                             element={
                                 <TaskPage
                                     tasks={tasks}
