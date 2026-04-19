@@ -8,6 +8,8 @@ export const tasksData = [
     },
     {
         type: 'Тип 5',
+        tips: '/content/type_5/tip.md',
+        tipSlug: '5',
         tasks: [
             { name: 'Иришка', slug: 'irishka', mdFile: '/content/type_5/irishka/irishka.md' },
         ],

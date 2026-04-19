@@ -14,10 +14,6 @@ export default defineConfig({
                     src: 'content',
                     dest: '.'
                 },
-                {
-                    src: 'yandex_27e6aa29f9924da5.html',
-                    dest: '.'
-                },
             ]
         })
     ],
