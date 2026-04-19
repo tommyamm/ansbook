@@ -11,6 +11,7 @@ import Header from '@/components/layout/Header.jsx'
 import Sidebar from '@/components/layout/Sidebar.jsx'
 import HomePage from '@/pages/HomePage.jsx'
 import TaskView from '@/pages/TaskView.jsx'
+import TipPage from '@/pages/TipPage.jsx'
 
 // Обёртка для TaskView — читает :taskSlug из URL
 function TaskPage({ tasks, loadTaskContent }) {
@@ -124,6 +125,11 @@ function App() {
         navigate(`/task/${task.slug}`)
     }
 
+    const selectTips = (tipSlug) => {
+        if (isMobile) setSidebarOpen(false)
+        navigate(`/tips/${tipSlug}`)
+    }
+
     const toggleTypeExpansion = (typeTitle) => {
         setExpandedTypes(prev => ({ ...prev, [typeTitle]: !prev[typeTitle] }))
     }
@@ -131,6 +137,10 @@ function App() {
     // Определяем активное задание по URL (по slug) для подсветки в sidebar
     const activeTaskSlug = location.pathname.startsWith('/task/')
         ? location.pathname.replace('/task/', '')
+        : null
+
+    const activeTipSlug = location.pathname.startsWith('/tips/')
+        ? location.pathname.replace('/tips/', '')
         : null
 
     if (tasksLoading) {
@@ -160,12 +170,14 @@ function App() {
                 isMobile={isMobile}
                 tasks={tasks}
                 activeTaskSlug={activeTaskSlug}
+                activeTipSlug={activeTipSlug}
                 searchTerm={searchTerm}
                 expandedTypes={expandedTypes}
                 onClose={() => setSidebarOpen(false)}
                 onSearchChange={setSearchTerm}
                 onToggleType={toggleTypeExpansion}
                 onSelectTask={selectTask}
+                onSelectTips={selectTips}
                 onExpandAll={handleExpandAll}
                 onCollapseAll={handleCollapseAll}
             />
@@ -192,6 +204,10 @@ function App() {
                                     loadTaskContent={loadTaskContent}
                                 />
                             }
+                        />
+                        <Route
+                            path="/tips/:typeSlug"
+                            element={<TipPage tasks={tasks} />}
                         />
                     </Routes>
                 </main>

@@ -3,22 +3,25 @@ import { Input } from '@/components/ui/Input.jsx'
 import { Button } from '@/components/ui/Button.jsx'
 import { Badge } from '@/components/ui/Badge.jsx'
 import { AnimatedCollapse } from '@/components/common/AnimateCollapse.jsx'
-import { 
-    Search, X, ChevronDown, 
-    FileText, ChevronsUpDown, ChevronsDownUp } 
-from 'lucide-react'
+import {
+    Search, X, ChevronDown, Sun,
+    FileText, ChevronsUpDown, ChevronsDownUp
+}
+    from 'lucide-react'
 
 const Sidebar = ({
     isOpen,
     isMobile,
     tasks,
-    activeTaskName,
+    activeTaskSlug,
+    activeTipSlug,
     searchTerm,
     expandedTypes,
     onClose,
     onSearchChange,
     onToggleType,
     onSelectTask,
+    onSelectTips,
     onExpandAll,
     onCollapseAll,
 }) => {
@@ -30,7 +33,7 @@ const Sidebar = ({
         if (isOpen && activeRef.current) {
             activeRef.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
         }
-    }, [isOpen, activeTaskName])
+    }, [isOpen, activeTaskSlug])
 
     const filteredTasks = tasks
         .map((type) => ({
@@ -125,7 +128,8 @@ const Sidebar = ({
                         <div className="space-y-1">
                             {filteredTasks.map((type, typeIndex) => {
                                 const isExpanded = expandedTypes[type.type]
-                                const hasActive = type.tasks.some(t => t.name === activeTaskName)
+                                const hasActive = type.tasks.some(t => t.slug === activeTaskSlug) || type.tipSlug === activeTipSlug
+                                const isTipsActive = type.tipSlug === activeTipSlug
 
                                 return (
                                     <div key={typeIndex}>
@@ -136,7 +140,7 @@ const Sidebar = ({
                                         >
                                             <span className="font-medium text-sm">{type.type}</span>
                                             <div className="flex items-center gap-2">
-                                                <Badge variant="outline" className="text-xs px-1.5 py-0 h-5 font-normal">
+                                                <Badge variant="secondary" className="text-xs px-1.5 py-0 h-5 font-normal">
                                                     {type.tasks.length}
                                                 </Badge>
                                                 <ChevronDown
@@ -148,8 +152,23 @@ const Sidebar = ({
 
                                         <AnimatedCollapse isOpen={isExpanded}>
                                             <div className="ml-3 pl-3 border-l border-border space-y-0.5 my-1">
+                                                {type.tips && type.tipSlug && (
+                                                    <Button
+                                                        onClick={() => onSelectTips(type.tipSlug)}
+                                                        variant={isTipsActive ? 'secondary' : 'ghost'}
+                                                        ref={isTipsActive ? activeRef : null}
+                                                        className={`w-full justify-start p-2 h-auto text-sm ${isTipsActive ? 'font-medium' : 'font-normal'}`}
+                                                    >
+                                                        <Sun
+                                                            className="h-3 w-3 mr-2 flex-shrink-0"
+                                                            style={{ color: 'var(--tips-color)' }}
+                                                    
+                                                        />
+                                                        <span style={{ color: 'var(--tips-color)' }}>Советы</span>
+                                                    </Button>
+                                                )}
                                                 {type.tasks.map((task, taskIndex) => {
-                                                    const isActive = task.name === activeTaskName
+                                                    const isActive = task.slug === activeTaskSlug
                                                     return (
                                                         <Button
                                                             key={taskIndex}
@@ -158,7 +177,9 @@ const Sidebar = ({
                                                             className={`w-full justify-start p-2 h-auto text-sm ${isActive ? 'font-medium' : 'font-normal'}`}
                                                             onClick={() => onSelectTask(task)}
                                                         >
-                                                            <FileText className={`h-3 w-3 mr-2 flex-shrink-0 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
+                                                            <FileText
+                                                                className={`h-3 w-3 mr-2 flex-shrink-0 text-primary`}
+                                                            />
                                                             <span className="truncate">{task.name}</span>
                                                         </Button>
                                                     )
@@ -172,13 +193,6 @@ const Sidebar = ({
                     )}
                 </div>
 
-                {/* Fade-градиент снизу — визуальный сигнал "здесь можно скроллить" */}
-                <div
-                    className="absolute bottom-0 left-0 right-0 h-8 pointer-events-none"
-                    style={{
-                        background: 'linear-gradient(to bottom, transparent, var(--card))'
-                    }}
-                />
             </div>
         </div>
     )

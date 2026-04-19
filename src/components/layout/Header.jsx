@@ -48,7 +48,7 @@ const Header = ({ sidebarOpen, darkMode, particleEnabled, onToggleSidebar, onTog
                 </Button>
             </div>
 
-            <Button variant="ghost" size="sm" onClick={onToggleDarkMode}>
+            <Button variant="outline" size="sm" onClick={onToggleDarkMode}>
                 {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
         </div>

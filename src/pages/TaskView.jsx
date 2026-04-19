@@ -10,10 +10,10 @@ const TaskView = ({ currentTask, taskContent, tasks }) => {
 
     const taskType = tasks.find(type =>
         type.tasks.some(task => task.name === currentTask.name)
-    )?.type
+    )
 
     return (
-        <Card className="max-w-4xl mx-auto card-hover">
+        <Card className="max-w-4xl mx-auto">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2 task-header">
@@ -23,7 +23,7 @@ const TaskView = ({ currentTask, taskContent, tasks }) => {
                     <div className="flex items-center gap-2">
                         <Badge variant="secondary" className="flex items-center gap-1">
                             <FileText className="h-3 w-3" />
-                            {taskType}
+                            {taskType?.type}
                         </Badge>
                         <Badge variant="secondary">Python</Badge>
                     </div>
