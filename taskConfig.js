@@ -21,6 +21,12 @@ export const tasksData = [
         ],
     },
     {
+        type: 'Тип 17',
+        tasks: [
+            { name: 'Лабуба', slug: 'labuba', mdFile: '/content/type_17/labuba/labuba.md' },
+        ],
+    },
+    {
         type: 'Тип 23',
         tasks: [
             { name: 'Абобус', slug: 'abobus', mdFile: '/content/type_23/abobus/abobus.md' },
