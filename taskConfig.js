@@ -39,6 +39,12 @@ export const tasksData = [
         ],
     },
     {
+        type: 'Тип 25',
+        tasks: [
+            { name: 'Абдурозик', slug: 'abdurozik', mdFile: '/content/type_25/abdurozik/abdurozik.md' },
+        ],
+    },
+    {
         type: 'Тип 26',
         tasks: [
             { name: 'ОлегМонгол', slug: 'olegmongol', mdFile: '/content/type_26/olegmongol/olegmongol.md' },
